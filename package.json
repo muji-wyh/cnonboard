@@ -11,11 +11,13 @@
   },
   "dependencies": {
     "@tauri-apps/api": ">=2.0.0",
+    "@tauri-apps/cli-win32-x64-msvc": "^2.0.2",
     "@tauri-apps/plugin-shell": ">=2.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@rollup/rollup-win32-x64-msvc": "^4.24.0",
     "@tauri-apps/cli": ">=2.0.0",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
