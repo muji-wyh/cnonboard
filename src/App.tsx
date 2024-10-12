@@ -7,13 +7,14 @@ import { Game, Vendor, vendors } from "./venders.ts";
 const { TextArea } = Input;
 
 type AllGames = {
-  [name: string]: Game;
+  [name: string]: Game[];
 };
 
 type Column = {
   gameName: string;
   key: string;
   vendor: string;
+  playUrl: string;
 };
 
 const columns = [
@@ -28,14 +29,27 @@ const columns = [
     dataIndex: "vendor",
     sorter: (a: Column, b: Column) => (a.vendor > b.vendor ? -1 : 1),
   },
+  {
+    title: "playUrl",
+    key: "playUrl",
+    dataIndex: "playUrl",
+    render(playUrl: string) {
+      return <a href={playUrl}>{playUrl}</a>;
+    },
+  },
 ];
 
 function App() {
   const [loading, setLoading] = useState(false);
-  const [inputtedGameNames, setInputtedGameNames] = useState("");
+  const [inputtedGameNames, setInputtedGameNames] = useState([] as string[]);
   const [vendor, setVendor] = useState("");
   const [duplicatedGames, setDuplicatedGames] = useState([] as Game[]);
   const allGames = useRef({} as AllGames);
+  const gamesByVendor = useRef(
+    {} as {
+      [vendorId: string]: Game[];
+    },
+  );
   const [notifyApi, notifyContextHolder] = notification.useNotification();
 
   const showNotify = useCallback((desc: string, msg: string = "错误") => {
@@ -66,6 +80,8 @@ function App() {
                   result = data as Game[];
                 }
 
+                gamesByVendor.current[vendor.VendorId] = result;
+
                 resolve(
                   result.map((d) =>
                     Object.assign(d, {
@@ -87,7 +103,11 @@ function App() {
       .then((data: Game[][]) => {
         allGames.current = data.reduce((acc, cur) => {
           for (const game of cur) {
-            acc[game.Name] = game;
+            if (!acc[game.Name]) {
+              acc[game.Name] = [];
+            }
+
+            acc[game.Name].push(game);
           }
           return acc;
         }, {} as AllGames);
@@ -106,33 +126,42 @@ function App() {
 
   const handleGameNameInput = useCallback(
     (e: ChangeEvent<HTMLTextAreaElement>) => {
-      setInputtedGameNames(e.currentTarget?.value);
+      setInputtedGameNames(
+        e.currentTarget?.value.split("\n").map((d) => d.trim()),
+      );
     },
     [],
   );
 
   const handleChangeVendor = useCallback((e: RadioChangeEvent) => {
     setVendor(e.target.value);
+    setInputtedGameNames([]);
   }, []);
 
   const handleCheckDuplicate = useCallback(() => {
-    if (!inputtedGameNames) {
-      showNotify("请输入要检查的游戏");
-      return;
-    }
-
     if (!vendor) {
       showNotify("请选择 vendor");
       return;
     }
 
-    // check duplicate
-    const result = inputtedGameNames.split("\n").reduce((acc, cur) => {
-      const name = cur.trim();
-      const game = allGames.current[name];
+    let gamesToBeChecked: string[] = inputtedGameNames.filter(Boolean);
 
-      if (game && game.VendorId !== vendor) {
-        acc.push(game);
+    if (!gamesToBeChecked.length) {
+      gamesToBeChecked = gamesByVendor.current[vendor].map((d) => d.Name);
+      setInputtedGameNames(gamesToBeChecked);
+    }
+
+    // check duplicate
+    const result = gamesToBeChecked.reduce((acc, cur) => {
+      const name = cur.trim();
+      const onboardedGames = allGames.current[name];
+
+      if (onboardedGames) {
+        for (const onboardedGame of onboardedGames) {
+          if (onboardedGame.VendorId !== vendor) {
+            acc.push(onboardedGame);
+          }
+        }
       }
 
       return acc;
@@ -149,9 +178,16 @@ function App() {
     <div className="container">
       {notifyContextHolder}
 
-      <div className="hidden">
+      <div className="hidden-">
         <p>debug info</p>
         <span>{window.location.href}</span>
+        <p className="">
+          现有游戏:{" "}
+          {Object.keys(allGames.current).reduce((acc, cur) => {
+            return acc + allGames.current[cur].length;
+          }, 0)}
+          个
+        </p>
       </div>
 
       <Spin tip="Loading" size="large" spinning={loading}>
@@ -169,14 +205,15 @@ function App() {
               <Alert
                 message={
                   <div className="">
-                    <p className="">查重结果:</p>
+                    <p className="">查重结果({duplicatedGames.length}):</p>
                     <Table
                       dataSource={duplicatedGames.map(
-                        (game) =>
+                        (game, i) =>
                           ({
-                            key: game.Name,
+                            key: game.Name + i,
                             gameName: game.Name,
                             vendor: game.VendorId,
+                            playUrl: game.PlayUrl,
                           }) as Column,
                       )}
                       columns={columns}
@@ -204,9 +241,15 @@ function App() {
 
           <div className="">
             <p className="">请输入要检查的游戏的名字(每行一个名字)</p>
+            <p className="">
+              游戏数:{" "}
+              <span className="">
+                {inputtedGameNames.filter(Boolean).length}
+              </span>
+            </p>
             <TextArea
               rows={20}
-              value={inputtedGameNames}
+              value={inputtedGameNames.join("\n")}
               onChange={handleGameNameInput}
             />
           </div>
