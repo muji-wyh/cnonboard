@@ -12,5 +12,15 @@
     display: none;
 }
 
+.game-column {
+    display: flex;
+    gap: 4px;
+}
+
+.game-detail-data {
+    width: 600px;
+    height: 400px !important;
+}
+
 @media (prefers-color-scheme: dark) {  }
 

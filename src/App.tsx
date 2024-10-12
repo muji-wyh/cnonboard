@@ -1,8 +1,9 @@
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
-import { Button, RadioChangeEvent, Spin } from "antd";
+import { Button, Popover, RadioChangeEvent, Spin } from "antd";
 import { Radio, Divider, Input, notification, Alert, Table } from "antd";
 import "./App.css";
 import { Game, Vendor, vendors } from "./venders.ts";
+import { GameCard } from "./components/game-card.tsx";
 
 const { TextArea } = Input;
 
@@ -15,6 +16,7 @@ type Column = {
   key: string;
   vendor: string;
   playUrl: string;
+  game: Game;
 };
 
 const columns = [
@@ -22,6 +24,22 @@ const columns = [
     title: "游戏名称",
     key: "gameName",
     dataIndex: "gameName",
+    render(_: string, { game }: Column) {
+      return (
+        <Popover
+          content={
+            <TextArea
+              className="game-detail-data"
+              value={JSON.stringify(Object.assign(game), undefined, 4)}
+            />
+          }
+          title="数据详情"
+          trigger="click"
+        >
+          <span className="">{game.Name}</span>
+        </Popover>
+      );
+    },
   },
   {
     title: "vendor",
@@ -33,8 +51,13 @@ const columns = [
     title: "playUrl",
     key: "playUrl",
     dataIndex: "playUrl",
-    render(playUrl: string) {
-      return <a href={playUrl}>{playUrl}</a>;
+    render(_: string, g: Column) {
+      return (
+        <div className="game-column">
+          <GameCard game={g.game} type="vendor" />
+          <GameCard game={g.game} type="msn" />
+        </div>
+      );
     },
   },
 ];
@@ -214,6 +237,7 @@ function App() {
                             gameName: game.Name,
                             vendor: game.VendorId,
                             playUrl: game.PlayUrl,
+                            game,
                           }) as Column,
                       )}
                       columns={columns}
