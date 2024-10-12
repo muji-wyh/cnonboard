@@ -1,6 +1,6 @@
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import { Button, RadioChangeEvent, Spin } from "antd";
-import { Radio, Divider, Input, notification, Space } from "antd";
+import { Radio, Divider, Input, notification, Alert, Table } from "antd";
 import "./App.css";
 import { Game, Vendor, vendors } from "./venders.ts";
 
@@ -9,6 +9,20 @@ const { TextArea } = Input;
 type AllGames = {
   [name: string]: Game;
 };
+
+const columns = [
+  {
+    title: "游戏名称",
+    key: "gameName",
+    dataIndex: "gameName",
+  },
+  {
+    title: "vendor",
+    key: "vendor",
+    dataIndex: "vendor",
+    sorter: (a: Game, b: Game) => (a.VendorId > b.VendorId ? -1 : 1),
+  },
+];
 
 function App() {
   const [loading, setLoading] = useState(false);
@@ -129,6 +143,11 @@ function App() {
     <div className="container">
       {notifyContextHolder}
 
+      <div className="">
+        <p>debug info</p>
+        <span>{window.location.href}</span>
+      </div>
+
       <Spin tip="Loading" size="large" spinning={loading}>
         <div className="check-duplicate">
           <h1 className="">新上架游戏查重</h1>
@@ -141,16 +160,22 @@ function App() {
 
           {!!duplicatedGames.length && (
             <>
-              <div className="">
-                <p className="">查重结果:</p>
-
-                {duplicatedGames.map((game) => (
-                  <div key={game.Name} className="">
-                    <span className="">{game.Name}</span>
-                    <span className="">{game.VendorId}</span>
+              <Alert
+                message={
+                  <div className="">
+                    <p className="">查重结果:</p>
+                    <Table
+                      dataSource={duplicatedGames.map((game) => ({
+                        key: game.Name,
+                        gameName: game.Name,
+                        vendor: game.VendorId,
+                      }))}
+                      columns={columns}
+                    />
                   </div>
-                ))}
-              </div>
+                }
+                type="error"
+              />
               <Divider />
             </>
           )}
