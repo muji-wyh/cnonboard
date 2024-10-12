@@ -1,2 +1,12 @@
+.err-msg {
+    & .msg-tip {
+        color: red;
+    }
+
+    & .msg {
+        color: red;
+    }
+}
 
 @media (prefers-color-scheme: dark) {  }
+
