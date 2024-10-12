@@ -1,2 +1,16 @@
+.err-msg {
+    & .msg-tip {
+        color: red;
+    }
+
+    & .msg {
+        color: red;
+    }
+}
+
+.hidden {
+    display: none;
+}
 
 @media (prefers-color-scheme: dark) {  }
+

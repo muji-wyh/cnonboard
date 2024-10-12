@@ -17,6 +17,9 @@ export type Game = {
   PublisherName: string; // "u7u9.com";
   Tags: string[]; // ["赛车", "男生", "体育", "双人", "城市", "运动", "html5游戏"];
   RelatedGameIds: string[]; // [ "10010025", "10010017" ];
+
+  // added by FE
+  VendorId: string;
 };
 
 export type Vendor = {
