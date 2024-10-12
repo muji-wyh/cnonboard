@@ -149,7 +149,7 @@ function App() {
     <div className="container">
       {notifyContextHolder}
 
-      <div className="">
+      <div className="hidden">
         <p>debug info</p>
         <span>{window.location.href}</span>
       </div>
