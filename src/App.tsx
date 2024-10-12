@@ -10,6 +10,12 @@ type AllGames = {
   [name: string]: Game;
 };
 
+type Column = {
+  gameName: string;
+  key: string;
+  vendor: string;
+};
+
 const columns = [
   {
     title: "游戏名称",
@@ -20,7 +26,7 @@ const columns = [
     title: "vendor",
     key: "vendor",
     dataIndex: "vendor",
-    sorter: (a: Game, b: Game) => (a.VendorId > b.VendorId ? -1 : 1),
+    sorter: (a: Column, b: Column) => (a.vendor > b.vendor ? -1 : 1),
   },
 ];
 
@@ -165,11 +171,14 @@ function App() {
                   <div className="">
                     <p className="">查重结果:</p>
                     <Table
-                      dataSource={duplicatedGames.map((game) => ({
-                        key: game.Name,
-                        gameName: game.Name,
-                        vendor: game.VendorId,
-                      }))}
+                      dataSource={duplicatedGames.map(
+                        (game) =>
+                          ({
+                            key: game.Name,
+                            gameName: game.Name,
+                            vendor: game.VendorId,
+                          }) as Column,
+                      )}
                       columns={columns}
                     />
                   </div>

@@ -87,7 +87,7 @@ export const vendors: Vendor[] = [
   v_360,
   v_3dm,
   v_7k7k,
-  // v_u7u9,
+  v_u7u9,
   v_yiqiyoo,
   v_yiqiyoo2,
 ].map((d) => ({
