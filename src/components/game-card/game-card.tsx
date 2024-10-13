@@ -1,5 +1,5 @@
-import { Game } from "../../configs/venders.ts";
 import "./game-card.css";
+import { type Game } from "../../typings/game.ts";
 
 type Props = {
   game: Game;

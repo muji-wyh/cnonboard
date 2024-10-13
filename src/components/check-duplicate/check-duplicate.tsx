@@ -2,7 +2,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Spin, Tabs } from "antd";
 import { notification } from "antd";
 import "./check-duplicate.css";
-import { Game } from "../../configs/venders.ts";
 import {
   AllGames,
   fetchMsnGames,
@@ -10,6 +9,7 @@ import {
 } from "../../utils/game-fetch.ts";
 import VendorDuplicate from "./vendor-duplicates.tsx";
 import TotalDuplicate from "./total-duplicates.tsx";
+import { type Game } from "../../typings/game.ts";
 
 const activeKeys = {
   vendor: "vendor",
@@ -25,7 +25,7 @@ function CheckDuplicate() {
     },
   );
   const [notifyApi, notifyContextHolder] = notification.useNotification();
-  const msnGames = useRef([]);
+  const msnGames = useRef({});
   const [activeKey, setActiveKey] = useState(activeKeys.vendor);
 
   const showNotify = useCallback((desc: string, msg: string = "错误") => {
@@ -87,7 +87,7 @@ function CheckDuplicate() {
             },
             {
               key: activeKeys.total,
-              label: "总体",
+              label: "总体重复情况",
               children: <TotalDuplicate />,
             },
           ]}

@@ -2,9 +2,11 @@ import { ChangeEvent, useCallback, useState } from "react";
 import { Button, Popover, RadioChangeEvent } from "antd";
 import { Radio, Divider, Input, notification, Alert, Table } from "antd";
 import "./vendor-duplicates.css";
-import { Game, Vendor, vendors } from "../../configs/venders.ts";
+import { vendors } from "../../configs/venders.ts";
 import { GameCard } from "../game-card/game-card.tsx";
 import { type AllGames } from "../../utils/game-fetch.ts";
+import { type Game } from "../../typings/game.ts";
+import { type Vendor } from "../../typings/vendor.ts";
 
 const { TextArea } = Input;
 

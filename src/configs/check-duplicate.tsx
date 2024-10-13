@@ -1,6 +1,6 @@
 import { Input, Popover } from "antd";
 import { GameCard } from "../components/game-card/game-card.tsx";
-import { Game } from "./venders.ts";
+import { type Game } from "../typings/game.ts";
 
 const { TextArea } = Input;
 
