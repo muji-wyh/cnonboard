@@ -20,7 +20,7 @@ export const fetchMsnGames = async ({ signal }: { signal: AbortSignal }) => {
 };
 
 export type AllGames = {
-  [name: string]: Game[];
+  [gameName: string]: Game[];
 };
 
 export const fetchVendorGames = async ({ signal }: { signal: AbortSignal }) => {
