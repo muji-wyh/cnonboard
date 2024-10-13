@@ -4,6 +4,7 @@ import { Radio, Divider, Input, notification, Alert, Table } from "antd";
 import "./App.css";
 import { Game, Vendor, vendors } from "./venders.ts";
 import { GameCard } from "./components/game-card.tsx";
+import { fetchMsnGames } from "./utils/msn-game.ts";
 
 const { TextArea } = Input;
 
@@ -74,6 +75,7 @@ function App() {
     },
   );
   const [notifyApi, notifyContextHolder] = notification.useNotification();
+  const msnGames = useRef([]);
 
   const showNotify = useCallback((desc: string, msg: string = "错误") => {
     notifyApi.info({
@@ -88,42 +90,44 @@ function App() {
     const signal = controller.signal;
     setLoading(true);
 
-    Promise.all(
-      vendors.map(
-        (vendor: Vendor) =>
-          new Promise<Game[]>((resolve, reject) => {
-            fetch(vendor.Api, { signal })
-              .then((res) => res.json())
-              .then((data) => {
-                let result: Game[];
+    (async () => {
+      try {
+        const data: Game[][] = await Promise.all(
+          vendors.map(
+            (vendor: Vendor) =>
+              new Promise<Game[]>((resolve, reject) => {
+                fetch(vendor.Api, { signal })
+                  .then((res) => res.json())
+                  .then((data) => {
+                    let result: Game[];
 
-                if (!Array.isArray(data)) {
-                  result = data.data as Game[];
-                } else {
-                  result = data as Game[];
-                }
+                    if (!Array.isArray(data)) {
+                      result = data.data as Game[];
+                    } else {
+                      result = data as Game[];
+                    }
 
-                gamesByVendor.current[vendor.VendorId] = result;
+                    gamesByVendor.current[vendor.VendorId] = result;
 
-                resolve(
-                  result.map((d) =>
-                    Object.assign(d, {
-                      VendorId: vendor.VendorId,
-                    }),
-                  ),
-                );
-              })
-              .catch((e) => {
-                if (e.name === "AbortError") {
-                  return;
-                }
+                    resolve(
+                      result.map((d) =>
+                        Object.assign(d, {
+                          VendorId: vendor.VendorId,
+                        }),
+                      ),
+                    );
+                  })
+                  .catch((e) => {
+                    if (e.name === "AbortError") {
+                      return;
+                    }
 
-                reject(e);
-              });
-          }),
-      ),
-    )
-      .then((data: Game[][]) => {
+                    reject(e);
+                  });
+              }),
+          ),
+        );
+
         allGames.current = data.reduce((acc, cur) => {
           for (const game of cur) {
             if (!acc[game.Name]) {
@@ -134,12 +138,16 @@ function App() {
           }
           return acc;
         }, {} as AllGames);
-        setLoading(false);
-      })
-      .catch((e) => {
+
+        msnGames.current = await fetchMsnGames({ signal });
+
+        console.info("msgGames", msnGames.current);
+      } catch (e: any) {
         showNotify(e.message);
-        setLoading(false);
-      });
+      }
+
+      setLoading(false);
+    })();
 
     return () => {
       setLoading(false);
