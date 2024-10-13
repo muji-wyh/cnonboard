@@ -1,4 +1,4 @@
-import { Game } from "../venders.ts";
+import { Game } from "../../configs/venders.ts";
 import "./game-card.css";
 
 type Props = {
