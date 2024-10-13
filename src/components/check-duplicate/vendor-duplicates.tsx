@@ -1,65 +1,15 @@
 import { ChangeEvent, useCallback, useState } from "react";
-import { Button, Popover, RadioChangeEvent } from "antd";
+import { Button, RadioChangeEvent } from "antd";
 import { Radio, Divider, Input, notification, Alert, Table } from "antd";
 import "./vendor-duplicates.css";
 import { vendors } from "../../configs/venders.ts";
-import { GameCard } from "../game-card/game-card.tsx";
 import { type AllGames } from "../../utils/game-fetch.ts";
 import { type Game } from "../../typings/game.ts";
 import { type Vendor } from "../../typings/vendor.ts";
+import type { CheckDuplicateTableColumn } from "../../typings/check-duplicate.ts";
+import { checkDuplicateTableColumns } from "../../configs/check-duplicate.tsx";
 
 const { TextArea } = Input;
-
-type Column = {
-  gameName: string;
-  key: string;
-  vendor: string;
-  playUrl: string;
-  game: Game;
-};
-
-const columns = [
-  {
-    title: "游戏名称",
-    key: "gameName",
-    dataIndex: "gameName",
-    render(_: string, { game }: Column) {
-      return (
-        <Popover
-          content={
-            <TextArea
-              className="game-detail-data"
-              value={JSON.stringify(Object.assign(game), undefined, 4)}
-            />
-          }
-          title="数据详情"
-          trigger="click"
-        >
-          <span className="">{game.Name}</span>
-        </Popover>
-      );
-    },
-  },
-  {
-    title: "vendor",
-    key: "vendor",
-    dataIndex: "vendor",
-    sorter: (a: Column, b: Column) => (a.vendor > b.vendor ? -1 : 1),
-  },
-  {
-    title: "playUrl",
-    key: "playUrl",
-    dataIndex: "playUrl",
-    render(_: string, g: Column) {
-      return (
-        <div className="game-column">
-          <GameCard game={g.game} type="vendor" />
-          <GameCard game={g.game} type="msn" />
-        </div>
-      );
-    },
-  },
-];
 
 type Props = {
   gamesByVendor: {
@@ -186,9 +136,9 @@ function VendorDuplicate({ gamesByVendor, allGames }: Props) {
                           vendor: game.VendorId,
                           playUrl: game.PlayUrl,
                           game,
-                        }) as Column,
+                        }) as CheckDuplicateTableColumn,
                     )}
-                    columns={columns}
+                    columns={checkDuplicateTableColumns}
                   />
                 </div>
               }

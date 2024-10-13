@@ -21,3 +21,9 @@ export type Game = {
   // added by FE
   VendorId: string;
 };
+
+export type LandingApi = {
+  gamesByGenre: {
+    games: Game[];
+  }[];
+};

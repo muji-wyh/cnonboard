@@ -1,16 +1,8 @@
 import { Input, Popover } from "antd";
 import { GameCard } from "../components/game-card/game-card.tsx";
-import { type Game } from "../typings/game.ts";
+import type { CheckDuplicateTableColumn } from "../typings/check-duplicate.ts";
 
 const { TextArea } = Input;
-
-export type CheckDuplicateTableColumn = {
-  gameName: string;
-  key: string;
-  vendor: string;
-  playUrl: string;
-  game: Game;
-};
 
 export const checkDuplicateTableColumns = [
   {

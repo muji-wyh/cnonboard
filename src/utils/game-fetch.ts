@@ -1,4 +1,6 @@
-import { Game, Vendor, vendors } from "../configs/venders.ts";
+import { vendors } from "../configs/venders.ts";
+import type { Game } from "../typings/game.ts";
+import type { Vendor } from "../typings/vendor.ts";
 
 export const fetchMsnGames = async ({ signal }: { signal: AbortSignal }) => {
   try {
