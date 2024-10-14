@@ -27,8 +27,8 @@ export type MsnGame = {
   cmsBrandId: string; // "";
   created: string; // "2024-09-30T11:17:25.7874998Z";
   defaultName: string; // "3dm_liezhan";
-  defaultRank: string; // 21;
-  genres: string; // ["Web"];
+  defaultRank: number; // 21;
+  genres: string[]; // ["Web"];
   heroThumbnailId: string; // "OCGE.3dm_liezhan_v1_hero";
   id: string; // "3dm_liezhan";
   lastModified: string; // "2024-09-30T11:17:25.7874998Z";

@@ -1,16 +1,21 @@
 import "./before-onboard.css";
-import { Button, Divider, notification } from "antd";
+import { Button, Divider, notification, Table } from "antd";
 import { VendorRadio } from "../vendor-radio/vendor-radio.tsx";
 import { useCallback, useContext, useState } from "react";
 import type { Vendor } from "../../typings/vendor.ts";
 import { GameDataContext } from "../../configs/game-data-context.ts";
 import { Game, MsnGame } from "../../typings/game.ts";
+import type { CheckDuplicateTableColumn } from "../../typings/check-duplicate.ts";
+import { checkDuplicateTableColumns } from "../../configs/check-duplicate.tsx";
+import { getVendorGameFromMsnGame } from "../../utils/game.ts";
 
 export const BeforeOnboard = () => {
   const [vendor, setVendor] = useState("");
   const gameDataContext = useContext(GameDataContext);
   const { gamesByVendor, allMsnGamesByVendor } = gameDataContext;
   const [notifyApi, notifyContextHolder] = notification.useNotification();
+  const [newGames, setNewGames] = useState([] as Game[]);
+  const [gamesToBeDelete, setGamesToBeDelete] = useState([] as MsnGame[]);
 
   const handleChangeVendor = useCallback((v: Vendor["VendorId"]) => {
     setVendor(v);
@@ -32,8 +37,8 @@ export const BeforeOnboard = () => {
 
     const gamesFromVendor = gamesByVendor[vendor];
     const gamesFromMsn = allMsnGamesByVendor[vendor];
-    const newGames = [] as Game[];
-    const gamesToBeDelete = [] as MsnGame[];
+    const newGames_ = [] as Game[];
+    const gamesToBeDelete_ = [] as MsnGame[];
 
     const idMapVendor = gamesFromVendor.reduce(
       (acc, cur) => {
@@ -53,20 +58,19 @@ export const BeforeOnboard = () => {
     // new games
     for (const game of gamesFromVendor) {
       if (!idMapMsn[`${vendor}_${game.ExternalId}`]) {
-        newGames.push(game);
+        newGames_.push(game);
       }
     }
 
     // games to be deleted
     for (const game of gamesFromMsn) {
       if (!idMapVendor[game.id.split("_")[1]]) {
-        gamesToBeDelete.push(game);
+        gamesToBeDelete_.push(game);
       }
     }
 
-    // todo-Yoki
-    console.info(">>> newGames", newGames);
-    console.info(">>> toBeDeleted", gamesToBeDelete);
+    setNewGames(newGames_);
+    setGamesToBeDelete(gamesToBeDelete_);
   }, [vendor]);
 
   return (
@@ -83,15 +87,49 @@ export const BeforeOnboard = () => {
       <Divider />
 
       <h4 className="">要上架的新游戏：</h4>
+      {!newGames.length ? (
+        <p className="">无</p>
+      ) : (
+        <Table
+          dataSource={newGames.map(
+            (game, i) =>
+              ({
+                key: game.Name + i,
+                gameName: game.Name,
+                vendor: game.VendorId,
+                playUrl: game.PlayUrl,
+                game,
+              }) as CheckDuplicateTableColumn,
+          )}
+          columns={checkDuplicateTableColumns}
+        />
+      )}
 
       <Divider />
 
       <h4 className="">将被删除的游戏：</h4>
+      {!gamesToBeDelete.length ? (
+        <p className="">无</p>
+      ) : (
+        <Table
+          dataSource={gamesToBeDelete.map(
+            (game, i) =>
+              ({
+                key: game.name + i,
+                gameName: game.name,
+                vendor: game.id.split("_")[0],
+                playUrl: game.playUrl,
+                game: getVendorGameFromMsnGame(game),
+              }) as CheckDuplicateTableColumn,
+          )}
+          columns={checkDuplicateTableColumns}
+        />
+      )}
 
       <Divider />
 
       <div className="">
-        <Button onClick={handleCheck}>开始</Button>
+        <Button onClick={handleCheck}>检查</Button>
       </div>
     </div>
   );

@@ -11,7 +11,12 @@ export const GameCard = ({ game, type }: Props) => {
 
   return (
     <a className="card" href={href} target="_blank">
-      <img src={game.Thumbnail} alt={game.Name} className="img" />
+      <img
+        referrerPolicy="no-referrer"
+        src={game.Thumbnail}
+        alt={game.Name}
+        className="img"
+      />
       <span className="label">{type}</span>
     </a>
   );
