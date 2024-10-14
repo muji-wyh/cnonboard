@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2.0.0",
-  "productName": "cnonboard",
+  "productName": "cnportal",
   "version": "0.1.0",
-  "identifier": "com.cnonboard.app",
+  "identifier": "com.cnportal.app",
   "build": {
     "beforeDevCommand": "pnpm dev",
     "devUrl": "http://localhost:1420",
@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "cnonboard",
+        "title": "cnportal",
         "width": 800,
         "height": 600
         

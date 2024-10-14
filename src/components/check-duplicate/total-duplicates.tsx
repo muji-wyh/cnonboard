@@ -31,7 +31,10 @@ function TotalDuplicate({ allGames }: Props) {
   return (
     <div className="">
       <p className="">
-        数量: <span className="">{duplicatedGames.length}</span>
+        数量:
+        <span className="">
+          {new Set(duplicatedGames.map((d) => d.Name)).size}
+        </span>
       </p>
 
       <Table

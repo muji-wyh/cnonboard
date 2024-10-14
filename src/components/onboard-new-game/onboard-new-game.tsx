@@ -1,15 +1,15 @@
-import { Button, Divider, Input, Radio, RadioChangeEvent } from "antd";
-import { vendors } from "../../configs/venders.ts";
+import { Button, Divider, Input } from "antd";
 import type { Vendor } from "../../typings/vendor.ts";
 import { useCallback, useState } from "react";
+import { VendorRadio } from "../vendor-radio/vendor-radio.tsx";
 
 const { TextArea } = Input;
 
 export const OnboardNewGame = () => {
   const [vendor, setVendor] = useState("");
 
-  const handleChangeVendor = useCallback((e: RadioChangeEvent) => {
-    setVendor(e.target.value);
+  const handleChangeVendor = useCallback((v: Vendor["VendorId"]) => {
+    setVendor(v);
   }, []);
 
   const handleClick = useCallback(() => {}, []);
@@ -19,13 +19,7 @@ export const OnboardNewGame = () => {
       <div className="">
         <p className="">请选择要上架哪家 vendor</p>
 
-        <Radio.Group onChange={handleChangeVendor} value={vendor}>
-          {vendors.map((v: Vendor) => (
-            <Radio.Button key={v.VendorId} value={v.VendorId}>
-              {v.VendorId}
-            </Radio.Button>
-          ))}
-        </Radio.Group>
+        <VendorRadio value={vendor} onChange={handleChangeVendor} />
 
         <Divider />
 

@@ -1,13 +1,13 @@
 import { ChangeEvent, useCallback, useState } from "react";
-import { Button, RadioChangeEvent } from "antd";
-import { Radio, Divider, Input, notification, Alert, Table } from "antd";
+import { Button } from "antd";
+import { Divider, Input, notification, Alert, Table } from "antd";
 import "./vendor-duplicates.css";
-import { vendors } from "../../configs/venders.ts";
 import { type AllGames } from "../../utils/game-fetch.ts";
 import { type Game } from "../../typings/game.ts";
 import { type Vendor } from "../../typings/vendor.ts";
 import type { CheckDuplicateTableColumn } from "../../typings/check-duplicate.ts";
 import { checkDuplicateTableColumns } from "../../configs/check-duplicate.tsx";
+import { VendorRadio } from "../vendor-radio/vendor-radio.tsx";
 
 const { TextArea } = Input;
 
@@ -41,8 +41,8 @@ function VendorDuplicate({ gamesByVendor, allGames }: Props) {
     [],
   );
 
-  const handleChangeVendor = useCallback((e: RadioChangeEvent) => {
-    setVendor(e.target.value);
+  const handleChangeVendor = useCallback((v: Vendor["VendorId"]) => {
+    setVendor(v);
     setInputtedGameNames([]);
   }, []);
 
@@ -89,13 +89,7 @@ function VendorDuplicate({ gamesByVendor, allGames }: Props) {
       <div className="check-duplicate">
         <div className="">
           <p className="">请选择要查的游戏来自哪家 vendor</p>
-          <Radio.Group onChange={handleChangeVendor} value={vendor}>
-            {vendors.map((v: Vendor) => (
-              <Radio.Button key={v.VendorId} value={v.VendorId}>
-                {v.VendorId}
-              </Radio.Button>
-            ))}
-          </Radio.Group>
+          <VendorRadio value={vendor} onChange={handleChangeVendor} />
         </div>
 
         <Divider />
