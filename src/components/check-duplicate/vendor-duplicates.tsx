@@ -17,7 +17,7 @@ function VendorDuplicate() {
   const [duplicatedGames, setDuplicatedGames] = useState([] as Game[]);
   const [notifyApi, notifyContextHolder] = notification.useNotification();
   const gameDataContext = useContext(GameDataContext);
-  const { gamesByVendor, allGames } = gameDataContext;
+  const { gamesByVendor, allVendorGamesMap } = gameDataContext;
 
   const showNotify = useCallback((desc: string, msg: string = "错误") => {
     notifyApi.info({
@@ -57,7 +57,7 @@ function VendorDuplicate() {
     // check duplicate
     const result = gamesToBeChecked.reduce((acc, cur) => {
       const name = cur.trim();
-      const onboardedGames = allGames[name];
+      const onboardedGames = allVendorGamesMap[name];
 
       if (onboardedGames) {
         for (const onboardedGame of onboardedGames) {

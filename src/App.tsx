@@ -6,7 +6,12 @@ import { OnboardNewGame } from "./components/onboard-new-game/onboard-new-game.t
 import { BeforeOnboard } from "./components/before-onboard/before-onboard.tsx";
 import { OnlineGamesSummary } from "./components/online-games-summary/online-games-summary.tsx";
 import { fetchMsnGames, fetchVendorGames } from "./utils/game-fetch.ts";
-import { AllMsnGamesByVendor, LandingApi, MsnGame } from "./typings/game.ts";
+import {
+  AllMsnGamesByVendor,
+  AllMsnGamesMap,
+  LandingApi,
+  MsnGame,
+} from "./typings/game.ts";
 import {
   defaultGameDataContextValue,
   GameDataContext,
@@ -35,13 +40,24 @@ function App() {
     (async () => {
       try {
         const vendorGames = await fetchVendorGames({ signal });
-        const allGames = vendorGames.allGames;
+        const allVendorGamesMap = vendorGames.allVendorGamesMap;
         const gamesByVendor = vendorGames.gamesByVendor;
         const msnGames: LandingApi = await fetchMsnGames({ signal });
-        const allMsnGames = msnGames.gamesByGenre.reduce(
+        let allMsnGames = msnGames.gamesByGenre.reduce(
           (acc, cur) => acc.concat(cur.games),
           [] as MsnGame[],
         );
+
+        // deduplicate
+        const allMsnGamesTmpMap = allMsnGames.reduce(
+          (acc, cur) => {
+            acc[cur.id] = cur;
+            return acc;
+          },
+          {} as { [id: MsnGame["id"]]: MsnGame },
+        );
+        allMsnGames = Object.values(allMsnGamesTmpMap);
+        const allMsnGamesMap = {} as AllMsnGamesMap;
         const allMsnGamesByVendor = {} as AllMsnGamesByVendor;
 
         for (const game of allMsnGames) {
@@ -52,13 +68,20 @@ function App() {
           }
 
           allMsnGamesByVendor[vendorId].push(game);
+
+          if (!allMsnGamesMap[game.name]) {
+            allMsnGamesMap[game.name] = [];
+          }
+
+          allMsnGamesMap[game.name].push(game);
         }
 
         setGameDataContextValue({
-          allGames,
+          allVendorGamesMap,
           gamesByVendor,
           msnGames,
           allMsnGames,
+          allMsnGamesMap,
           allMsnGamesByVendor,
         });
       } catch (e: any) {

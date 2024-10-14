@@ -8,15 +8,15 @@ import { GameDataContext } from "../../configs/game-data-context.ts";
 
 function TotalDuplicate() {
   const gameDataContext = useContext(GameDataContext);
-  const { allGames } = gameDataContext;
+  const { allVendorGamesMap } = gameDataContext;
   const duplicatedGames = [] as Game[];
 
-  for (const name in allGames) {
-    if (!allGames.hasOwnProperty(name)) {
+  for (const name in allVendorGamesMap) {
+    if (!allVendorGamesMap.hasOwnProperty(name)) {
       continue;
     }
 
-    const games = allGames[name];
+    const games = allVendorGamesMap[name];
 
     if (games.length < 2) {
       continue;

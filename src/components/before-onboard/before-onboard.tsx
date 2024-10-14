@@ -4,6 +4,7 @@ import { VendorRadio } from "../vendor-radio/vendor-radio.tsx";
 import { useCallback, useContext, useState } from "react";
 import type { Vendor } from "../../typings/vendor.ts";
 import { GameDataContext } from "../../configs/game-data-context.ts";
+import { Game, MsnGame } from "../../typings/game.ts";
 
 export const BeforeOnboard = () => {
   const [vendor, setVendor] = useState("");
@@ -24,9 +25,6 @@ export const BeforeOnboard = () => {
   }, []);
 
   const handleCheck = useCallback(() => {
-    // todo-Yoki
-    console.info(">>> checking");
-
     if (!vendor) {
       showNotify("请选择 vendor");
       return;
@@ -34,12 +32,42 @@ export const BeforeOnboard = () => {
 
     const gamesFromVendor = gamesByVendor[vendor];
     const gamesFromMsn = allMsnGamesByVendor[vendor];
-    const newGames = [];
-    const gamesToBeDelete = [];
+    const newGames = [] as Game[];
+    const gamesToBeDelete = [] as MsnGame[];
 
+    const idMapVendor = gamesFromVendor.reduce(
+      (acc, cur) => {
+        acc[cur.ExternalId] = cur;
+        return acc;
+      },
+      {} as { [VendorId: string]: Game },
+    );
+    const idMapMsn = gamesFromMsn.reduce(
+      (acc, cur) => {
+        acc[cur.id] = cur;
+        return acc;
+      },
+      {} as { [id: string]: MsnGame },
+    );
+
+    // new games
     for (const game of gamesFromVendor) {
+      if (!idMapMsn[`${vendor}_${game.ExternalId}`]) {
+        newGames.push(game);
+      }
     }
-  }, []);
+
+    // games to be deleted
+    for (const game of gamesFromMsn) {
+      if (!idMapVendor[game.id.split("_")[1]]) {
+        gamesToBeDelete.push(game);
+      }
+    }
+
+    // todo-Yoki
+    console.info(">>> newGames", newGames);
+    console.info(">>> toBeDeleted", gamesToBeDelete);
+  }, [vendor]);
 
   return (
     <div className="">

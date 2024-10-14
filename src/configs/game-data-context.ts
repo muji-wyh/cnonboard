@@ -2,7 +2,7 @@ import { createContext } from "react";
 import type { GameDataContext as GameDataContextType } from "../typings/game-data-context.ts";
 
 export const defaultGameDataContextValue = (): GameDataContextType => ({
-  allGames: {},
+  allVendorGamesMap: {},
   gamesByVendor: {},
   msnGames: {
     gamesByGenre: [
@@ -12,6 +12,7 @@ export const defaultGameDataContextValue = (): GameDataContextType => ({
     ],
   },
   allMsnGames: [],
+  allMsnGamesMap: {},
   allMsnGamesByVendor: {},
 });
 

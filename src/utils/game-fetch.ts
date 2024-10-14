@@ -1,5 +1,5 @@
 import { vendors } from "../configs/venders.ts";
-import type { AllGames, Game } from "../typings/game.ts";
+import type { AllVendorGamesMap, Game } from "../typings/game.ts";
 import type { Vendor } from "../typings/vendor.ts";
 
 export const fetchMsnGames = async ({ signal }: { signal: AbortSignal }) => {
@@ -62,7 +62,7 @@ export const fetchVendorGames = async ({ signal }: { signal: AbortSignal }) => {
     ),
   );
 
-  const allGames = data.reduce((acc, cur) => {
+  const allVendorGamesMap = data.reduce((acc, cur) => {
     for (const game of cur) {
       if (!acc[game.Name]) {
         acc[game.Name] = [];
@@ -71,10 +71,10 @@ export const fetchVendorGames = async ({ signal }: { signal: AbortSignal }) => {
       acc[game.Name].push(game);
     }
     return acc;
-  }, {} as AllGames);
+  }, {} as AllVendorGamesMap);
 
   return {
-    allGames,
+    allVendorGamesMap,
     gamesByVendor,
   };
 };

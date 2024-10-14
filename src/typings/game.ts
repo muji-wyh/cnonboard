@@ -55,8 +55,12 @@ export type LandingApi = {
 };
 
 // vendor 的游戏 map
-export type AllGames = {
+export type AllVendorGamesMap = {
   [gameName: string]: Game[];
+};
+
+export type AllMsnGamesMap = {
+  [name: string]: MsnGame[];
 };
 
 // vendor 的 vendor-游戏 map
