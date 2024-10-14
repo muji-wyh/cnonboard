@@ -46,7 +46,10 @@ function App() {
       const vendorGames = await fetchVendorGames({ signal });
       const allVendorGamesMap = vendorGames.allVendorGamesMap;
       const gamesByVendor = vendorGames.gamesByVendor;
-      const msnGames: LandingApi = await fetchMsnGames({ signal });
+      const msnGames: LandingApi = await fetchMsnGames({
+        signal,
+        isStaging: storeContextValue.isStaging,
+      });
       let allMsnGames = msnGames.gamesByGenre.reduce(
         (acc, cur) => acc.concat(cur.games),
         [] as MsnGame[],

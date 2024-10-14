@@ -83,7 +83,7 @@ export const BeforeOnboard = () => {
     <div className="">
       {notifyContextHolder}
 
-      <p className="">检查某个 vendor 的接口变动（跟现有线上数据的 dif）</p>
+      <p className="">检查某个 vendor 的接口变动（跟现有线上数据的 diff）</p>
 
       <Divider />
 
