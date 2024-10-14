@@ -11,6 +11,8 @@ export const defaultGameDataContextValue = (): GameDataContextType => ({
       },
     ],
   },
+  allMsnGames: [],
+  allMsnGamesByVendor: {},
 });
 
 export const GameDataContext = createContext(defaultGameDataContextValue());

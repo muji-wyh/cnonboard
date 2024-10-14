@@ -19,9 +19,6 @@ function VendorDuplicate() {
   const gameDataContext = useContext(GameDataContext);
   const { gamesByVendor, allGames } = gameDataContext;
 
-  // todo-Yoki
-  console.info(">>> gamesByVendor, allGames", gamesByVendor, allGames);
-
   const showNotify = useCallback((desc: string, msg: string = "错误") => {
     notifyApi.info({
       message: msg,
@@ -83,6 +80,8 @@ function VendorDuplicate() {
   return (
     <div className="container">
       {notifyContextHolder}
+
+      <p className="">数据来自: 各个 vendor 提供的接口</p>
 
       <div className="check-duplicate">
         <div className="">

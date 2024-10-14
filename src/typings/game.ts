@@ -1,3 +1,4 @@
+// vendor API 中的 game
 export type Game = {
   ExternalId: string; // "10009249";
   Name: string; // "城市极速赛车";
@@ -22,16 +23,43 @@ export type Game = {
   VendorId: string;
 };
 
+export type MsnGame = {
+  cmsBrandId: string; // "";
+  created: string; // "2024-09-30T11:17:25.7874998Z";
+  defaultName: string; // "3dm_liezhan";
+  defaultRank: string; // 21;
+  genres: string; // ["Web"];
+  heroThumbnailId: string; // "OCGE.3dm_liezhan_v1_hero";
+  id: string; // "3dm_liezhan";
+  lastModified: string; // "2024-09-30T11:17:25.7874998Z";
+  market: string; // "zh-cn";
+  name: string; // "烈斩";
+  playUrl: string; // "https://yx.shwswl.cn/zt/sqlz/login/";
+  publishDate: string; // "2024-09-30T11:17:25.7874998Z";
+  publisherId: string; // "game5";
+  publisherName: string; // "文枢网络";
+  softLaunched: false;
+  tags: string[];
+  thumbnailId: string; // "OCGE.3dm_liezhan_v1_main";
+  trailers: string[];
+};
+
+export type AllMsnGamesByVendor = {
+  [vendorId: string]: MsnGame[];
+};
+
 export type LandingApi = {
   gamesByGenre: {
-    games: Game[];
+    games: MsnGame[];
   }[];
 };
 
+// vendor 的游戏 map
 export type AllGames = {
   [gameName: string]: Game[];
 };
 
+// vendor 的 vendor-游戏 map
 export type GamesByVendor = {
   [vendorId: string]: Game[];
 };

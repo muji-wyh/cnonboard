@@ -8,11 +8,7 @@ import { GameDataContext } from "../../configs/game-data-context.ts";
 
 function TotalDuplicate() {
   const gameDataContext = useContext(GameDataContext);
-
   const { allGames } = gameDataContext;
-
-  console.info("allGames: AllGames;", allGames);
-
   const duplicatedGames = [] as Game[];
 
   for (const name in allGames) {
@@ -31,6 +27,7 @@ function TotalDuplicate() {
 
   return (
     <div className="">
+      <p className="">数据来自: 各个 vendor 提供的接口</p>
       <p className="">
         数量:
         <span className="">
