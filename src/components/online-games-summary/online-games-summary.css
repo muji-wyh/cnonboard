@@ -1,5 +1,23 @@
-.by-pc-web {
+ul, li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.genre-list {
   display: flex;
-  gap: 20px;
-  align-items: center;
+  flex-flow: column nowrap;
+  gap: 4px;
+}
+
+.genre-item {
+  display: flex;
+  gap: 14px;
+
+  & .label {
+    width: 60px;
+    text-align: end;
+  }
+
+  & .content {}
 }
