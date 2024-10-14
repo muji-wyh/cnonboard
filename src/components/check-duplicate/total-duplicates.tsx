@@ -1,15 +1,16 @@
 import "./total-duplicates.css";
-import type { AllGames } from "../../utils/game-fetch.ts";
 import { Table } from "antd";
 import type { CheckDuplicateTableColumn } from "../../typings/check-duplicate.ts";
 import { checkDuplicateTableColumns } from "../../configs/check-duplicate.tsx";
 import type { Game } from "../../typings/game.ts";
+import { useContext } from "react";
+import { GameDataContext } from "../../configs/game-data-context.ts";
 
-type Props = {
-  allGames: AllGames;
-};
+function TotalDuplicate() {
+  const gameDataContext = useContext(GameDataContext);
 
-function TotalDuplicate({ allGames }: Props) {
+  const { allGames } = gameDataContext;
+
   console.info("allGames: AllGames;", allGames);
 
   const duplicatedGames = [] as Game[];

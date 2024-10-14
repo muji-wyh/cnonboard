@@ -1,28 +1,26 @@
-import { ChangeEvent, useCallback, useState } from "react";
+import { ChangeEvent, useCallback, useContext, useState } from "react";
 import { Button } from "antd";
 import { Divider, Input, notification, Alert, Table } from "antd";
 import "./vendor-duplicates.css";
-import { type AllGames } from "../../utils/game-fetch.ts";
 import { type Game } from "../../typings/game.ts";
 import { type Vendor } from "../../typings/vendor.ts";
 import type { CheckDuplicateTableColumn } from "../../typings/check-duplicate.ts";
 import { checkDuplicateTableColumns } from "../../configs/check-duplicate.tsx";
 import { VendorRadio } from "../vendor-radio/vendor-radio.tsx";
+import { GameDataContext } from "../../configs/game-data-context.ts";
 
 const { TextArea } = Input;
 
-type Props = {
-  gamesByVendor: {
-    [vendorId: string]: Game[];
-  };
-  allGames: AllGames;
-};
-
-function VendorDuplicate({ gamesByVendor, allGames }: Props) {
+function VendorDuplicate() {
   const [inputtedGameNames, setInputtedGameNames] = useState([] as string[]);
   const [vendor, setVendor] = useState("");
   const [duplicatedGames, setDuplicatedGames] = useState([] as Game[]);
   const [notifyApi, notifyContextHolder] = notification.useNotification();
+  const gameDataContext = useContext(GameDataContext);
+  const { gamesByVendor, allGames } = gameDataContext;
+
+  // todo-Yoki
+  console.info(">>> gamesByVendor, allGames", gamesByVendor, allGames);
 
   const showNotify = useCallback((desc: string, msg: string = "错误") => {
     notifyApi.info({

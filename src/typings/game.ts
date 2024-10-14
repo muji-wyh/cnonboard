@@ -27,3 +27,11 @@ export type LandingApi = {
     games: Game[];
   }[];
 };
+
+export type AllGames = {
+  [gameName: string]: Game[];
+};
+
+export type GamesByVendor = {
+  [vendorId: string]: Game[];
+};
