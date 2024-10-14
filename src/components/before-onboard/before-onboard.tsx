@@ -1,7 +1,7 @@
 import "./before-onboard.css";
 import { Button, Divider, notification, Table } from "antd";
 import { VendorRadio } from "../vendor-radio/vendor-radio.tsx";
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import type { Vendor } from "../../typings/vendor.ts";
 import { StoreContext } from "../../configs/store-context.ts";
 import { Game, MsnGame } from "../../typings/game.ts";
@@ -11,11 +11,17 @@ import { getVendorGameFromMsnGame } from "../../utils/game.ts";
 
 export const BeforeOnboard = () => {
   const [vendor, setVendor] = useState("");
-  const gameDataContext = useContext(StoreContext);
-  const { gamesByVendor, allMsnGamesByVendor } = gameDataContext;
+  const storeContext = useContext(StoreContext);
+  const { gamesByVendor, allMsnGamesByVendor, isStaging } = storeContext;
   const [notifyApi, notifyContextHolder] = notification.useNotification();
   const [newGames, setNewGames] = useState([] as Game[]);
   const [gamesToBeDelete, setGamesToBeDelete] = useState([] as MsnGame[]);
+
+  useEffect(() => {
+    setVendor("");
+    setNewGames([]);
+    setGamesToBeDelete([]);
+  }, [isStaging]);
 
   const handleChangeVendor = useCallback((v: Vendor["VendorId"]) => {
     setVendor(v);

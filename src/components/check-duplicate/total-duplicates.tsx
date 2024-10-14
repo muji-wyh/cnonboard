@@ -7,8 +7,8 @@ import { useContext } from "react";
 import { StoreContext } from "../../configs/store-context.ts";
 
 function TotalDuplicate() {
-  const gameDataContext = useContext(StoreContext);
-  const { allVendorGamesMap } = gameDataContext;
+  const storeContext = useContext(StoreContext);
+  const { allVendorGamesMap } = storeContext;
   const duplicatedGames = [] as Game[];
 
   for (const name in allVendorGamesMap) {

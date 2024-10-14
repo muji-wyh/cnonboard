@@ -5,7 +5,6 @@ import {
   notification,
   Switch,
   Divider,
-  Affix,
 } from "antd";
 import CheckDuplicate from "./components/check-duplicate/check-duplicate";
 import { menuItems, menuKeys } from "./configs/menu.tsx";
@@ -28,7 +27,7 @@ import {
 
 function App() {
   const [currentMenuKey, setCurrentMenuKey] = useState(menuKeys.checkDuplicate);
-  const [gameDataContextValue, setGameDataContextValue] = useState(
+  const [storeContextValue, setStoreContextValue] = useState(
     getStoreContextValue(),
   );
   const [loading, setLoading] = useState(false);
@@ -41,71 +40,72 @@ function App() {
     });
   }, []);
 
+  const initData = async ({ signal }: { signal: AbortSignal }) => {
+    try {
+      setLoading(true);
+      const vendorGames = await fetchVendorGames({ signal });
+      const allVendorGamesMap = vendorGames.allVendorGamesMap;
+      const gamesByVendor = vendorGames.gamesByVendor;
+      const msnGames: LandingApi = await fetchMsnGames({ signal });
+      let allMsnGames = msnGames.gamesByGenre.reduce(
+        (acc, cur) => acc.concat(cur.games),
+        [] as MsnGame[],
+      );
+
+      // deduplicate
+      const allMsnGamesTmpMap = allMsnGames.reduce(
+        (acc, cur) => {
+          acc[cur.id] = cur;
+          return acc;
+        },
+        {} as { [id: MsnGame["id"]]: MsnGame },
+      );
+      allMsnGames = Object.values(allMsnGamesTmpMap);
+      const allMsnGamesMap = {} as AllMsnGamesMap;
+      const allMsnGamesByVendor = {} as AllMsnGamesByVendor;
+
+      for (const game of allMsnGames) {
+        const [vendorId] = game.id.split("_");
+
+        if (!allMsnGamesByVendor[vendorId]) {
+          allMsnGamesByVendor[vendorId] = [];
+        }
+
+        allMsnGamesByVendor[vendorId].push(game);
+
+        if (!allMsnGamesMap[game.name]) {
+          allMsnGamesMap[game.name] = [];
+        }
+
+        allMsnGamesMap[game.name].push(game);
+      }
+
+      setStoreContextValue((prevState) => ({
+        ...prevState,
+        allVendorGamesMap,
+        gamesByVendor,
+        msnGames,
+        allMsnGames,
+        allMsnGamesMap,
+        allMsnGamesByVendor,
+      }));
+    } catch (e: any) {
+      showNotify(e.message);
+    }
+
+    setLoading(false);
+  };
+
   useEffect(() => {
     const controller = new AbortController();
     const signal = controller.signal;
-    setLoading(true);
-
-    (async () => {
-      try {
-        const vendorGames = await fetchVendorGames({ signal });
-        const allVendorGamesMap = vendorGames.allVendorGamesMap;
-        const gamesByVendor = vendorGames.gamesByVendor;
-        const msnGames: LandingApi = await fetchMsnGames({ signal });
-        let allMsnGames = msnGames.gamesByGenre.reduce(
-          (acc, cur) => acc.concat(cur.games),
-          [] as MsnGame[],
-        );
-
-        // deduplicate
-        const allMsnGamesTmpMap = allMsnGames.reduce(
-          (acc, cur) => {
-            acc[cur.id] = cur;
-            return acc;
-          },
-          {} as { [id: MsnGame["id"]]: MsnGame },
-        );
-        allMsnGames = Object.values(allMsnGamesTmpMap);
-        const allMsnGamesMap = {} as AllMsnGamesMap;
-        const allMsnGamesByVendor = {} as AllMsnGamesByVendor;
-
-        for (const game of allMsnGames) {
-          const [vendorId] = game.id.split("_");
-
-          if (!allMsnGamesByVendor[vendorId]) {
-            allMsnGamesByVendor[vendorId] = [];
-          }
-
-          allMsnGamesByVendor[vendorId].push(game);
-
-          if (!allMsnGamesMap[game.name]) {
-            allMsnGamesMap[game.name] = [];
-          }
-
-          allMsnGamesMap[game.name].push(game);
-        }
-
-        setGameDataContextValue((prevState) => ({
-          ...prevState,
-          allVendorGamesMap,
-          gamesByVendor,
-          msnGames,
-          allMsnGames,
-          allMsnGamesMap,
-          allMsnGamesByVendor,
-        }));
-      } catch (e: any) {
-        showNotify(e.message);
-      }
-
-      setLoading(false);
-    })();
+    initData({ signal });
 
     return () => {
       setLoading(false);
       controller.abort();
     };
-  }, []);
+  }, [storeContextValue.isStaging]);
 
   const onClick: MenuProps["onClick"] = (e) => {
     setCurrentMenuKey(e.key);
@@ -119,25 +119,23 @@ function App() {
   };
 
   const handleStagingChange = useCallback((v: boolean) => {
-    setGameDataContextValue((prevState) => ({
-      ...prevState,
+    setStoreContextValue(() => ({
+      ...getStoreContextValue(),
       isStaging: v,
     }));
   }, []);
 
   return (
-    <StoreContext.Provider value={gameDataContextValue}>
+    <StoreContext.Provider value={storeContextValue}>
       {notifyContextHolder}
 
-      <Affix offsetTop={20}>
-        <div className="staging-wrap">
-          <span className="">staging:</span>
-          <Switch
-            checked={gameDataContextValue.isStaging}
-            onChange={handleStagingChange}
-          />
-        </div>
-      </Affix>
+      <div className="staging-wrap">
+        <span className="">staging:</span>
+        <Switch
+          checked={storeContextValue.isStaging}
+          onChange={handleStagingChange}
+        />
+      </div>
 
       <Divider />
 

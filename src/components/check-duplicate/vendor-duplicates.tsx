@@ -1,4 +1,10 @@
-import { ChangeEvent, useCallback, useContext, useState } from "react";
+import {
+  ChangeEvent,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { Button } from "antd";
 import { Divider, Input, notification, Alert, Table } from "antd";
 import "./vendor-duplicates.css";
@@ -16,8 +22,14 @@ function VendorDuplicate() {
   const [vendor, setVendor] = useState("");
   const [duplicatedGames, setDuplicatedGames] = useState([] as Game[]);
   const [notifyApi, notifyContextHolder] = notification.useNotification();
-  const gameDataContext = useContext(StoreContext);
-  const { gamesByVendor, allVendorGamesMap } = gameDataContext;
+  const storeContext = useContext(StoreContext);
+  const { gamesByVendor, allVendorGamesMap, isStaging } = storeContext;
+
+  useEffect(() => {
+    setInputtedGameNames([]);
+    setVendor("");
+    setDuplicatedGames([]);
+  }, [isStaging]);
 
   const showNotify = useCallback((desc: string, msg: string = "错误") => {
     notifyApi.info({

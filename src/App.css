@@ -23,6 +23,10 @@
 }
 
 .staging-wrap {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1;
     display: flex;
     gap: 6px;
     align-items: center;
