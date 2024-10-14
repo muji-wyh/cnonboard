@@ -22,5 +22,12 @@
     height: 400px !important;
 }
 
+.staging-wrap {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    justify-content: flex-end;
+}
+
 @media (prefers-color-scheme: dark) {  }
 

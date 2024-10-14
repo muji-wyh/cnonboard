@@ -3,7 +3,7 @@ import { Button, Divider, notification, Table } from "antd";
 import { VendorRadio } from "../vendor-radio/vendor-radio.tsx";
 import { useCallback, useContext, useState } from "react";
 import type { Vendor } from "../../typings/vendor.ts";
-import { GameDataContext } from "../../configs/game-data-context.ts";
+import { StoreContext } from "../../configs/store-context.ts";
 import { Game, MsnGame } from "../../typings/game.ts";
 import type { CheckDuplicateTableColumn } from "../../typings/check-duplicate.ts";
 import { checkDuplicateTableColumns } from "../../configs/check-duplicate.tsx";
@@ -11,7 +11,7 @@ import { getVendorGameFromMsnGame } from "../../utils/game.ts";
 
 export const BeforeOnboard = () => {
   const [vendor, setVendor] = useState("");
-  const gameDataContext = useContext(GameDataContext);
+  const gameDataContext = useContext(StoreContext);
   const { gamesByVendor, allMsnGamesByVendor } = gameDataContext;
   const [notifyApi, notifyContextHolder] = notification.useNotification();
   const [newGames, setNewGames] = useState([] as Game[]);

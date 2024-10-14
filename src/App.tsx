@@ -1,4 +1,12 @@
-import { type MenuProps, Menu, Spin, notification } from "antd";
+import {
+  type MenuProps,
+  Menu,
+  Spin,
+  notification,
+  Switch,
+  Divider,
+  Affix,
+} from "antd";
 import CheckDuplicate from "./components/check-duplicate/check-duplicate";
 import { menuItems, menuKeys } from "./configs/menu.tsx";
 import { useState, useEffect, useCallback } from "react";
@@ -6,6 +14,7 @@ import { OnboardNewGame } from "./components/onboard-new-game/onboard-new-game.t
 import { BeforeOnboard } from "./components/before-onboard/before-onboard.tsx";
 import { OnlineGamesSummary } from "./components/online-games-summary/online-games-summary.tsx";
 import { fetchMsnGames, fetchVendorGames } from "./utils/game-fetch.ts";
+import "./App.css";
 import {
   AllMsnGamesByVendor,
   AllMsnGamesMap,
@@ -13,14 +22,14 @@ import {
   MsnGame,
 } from "./typings/game.ts";
 import {
-  defaultGameDataContextValue,
-  GameDataContext,
-} from "./configs/game-data-context.ts";
+  storeContextValue as getStoreContextValue,
+  StoreContext,
+} from "./configs/store-context.ts";
 
 function App() {
   const [currentMenuKey, setCurrentMenuKey] = useState(menuKeys.checkDuplicate);
   const [gameDataContextValue, setGameDataContextValue] = useState(
-    defaultGameDataContextValue(),
+    getStoreContextValue(),
   );
   const [loading, setLoading] = useState(false);
   const [notifyApi, notifyContextHolder] = notification.useNotification();
@@ -76,14 +85,15 @@ function App() {
           allMsnGamesMap[game.name].push(game);
         }
 
-        setGameDataContextValue({
+        setGameDataContextValue((prevState) => ({
+          ...prevState,
           allVendorGamesMap,
           gamesByVendor,
           msnGames,
           allMsnGames,
           allMsnGamesMap,
           allMsnGamesByVendor,
-        });
+        }));
       } catch (e: any) {
         showNotify(e.message);
       }
@@ -108,9 +118,28 @@ function App() {
     [menuKeys.onlineGameSummary]: <OnlineGamesSummary />,
   };
 
+  const handleStagingChange = useCallback((v: boolean) => {
+    setGameDataContextValue((prevState) => ({
+      ...prevState,
+      isStaging: v,
+    }));
+  }, []);
+
   return (
-    <GameDataContext.Provider value={gameDataContextValue}>
+    <StoreContext.Provider value={gameDataContextValue}>
       {notifyContextHolder}
+
+      <Affix offsetTop={20}>
+        <div className="staging-wrap">
+          <span className="">staging:</span>
+          <Switch
+            checked={gameDataContextValue.isStaging}
+            onChange={handleStagingChange}
+          />
+        </div>
+      </Affix>
+
+      <Divider />
 
       <Spin tip="Loading" size="large" spinning={loading}>
         <Menu
@@ -121,7 +150,7 @@ function App() {
         />
         {compMap[currentMenuKey]}
       </Spin>
-    </GameDataContext.Provider>
+    </StoreContext.Provider>
   );
 }
 

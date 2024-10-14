@@ -4,10 +4,10 @@ import type { CheckDuplicateTableColumn } from "../../typings/check-duplicate.ts
 import { checkDuplicateTableColumns } from "../../configs/check-duplicate.tsx";
 import type { Game } from "../../typings/game.ts";
 import { useContext } from "react";
-import { GameDataContext } from "../../configs/game-data-context.ts";
+import { StoreContext } from "../../configs/store-context.ts";
 
 function TotalDuplicate() {
-  const gameDataContext = useContext(GameDataContext);
+  const gameDataContext = useContext(StoreContext);
   const { allVendorGamesMap } = gameDataContext;
   const duplicatedGames = [] as Game[];
 

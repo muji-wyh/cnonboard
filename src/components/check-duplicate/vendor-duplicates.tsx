@@ -7,7 +7,7 @@ import { type Vendor } from "../../typings/vendor.ts";
 import type { CheckDuplicateTableColumn } from "../../typings/check-duplicate.ts";
 import { checkDuplicateTableColumns } from "../../configs/check-duplicate.tsx";
 import { VendorRadio } from "../vendor-radio/vendor-radio.tsx";
-import { GameDataContext } from "../../configs/game-data-context.ts";
+import { StoreContext } from "../../configs/store-context.ts";
 
 const { TextArea } = Input;
 
@@ -16,7 +16,7 @@ function VendorDuplicate() {
   const [vendor, setVendor] = useState("");
   const [duplicatedGames, setDuplicatedGames] = useState([] as Game[]);
   const [notifyApi, notifyContextHolder] = notification.useNotification();
-  const gameDataContext = useContext(GameDataContext);
+  const gameDataContext = useContext(StoreContext);
   const { gamesByVendor, allVendorGamesMap } = gameDataContext;
 
   const showNotify = useCallback((desc: string, msg: string = "错误") => {
