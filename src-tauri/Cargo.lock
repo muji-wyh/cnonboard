@@ -334,7 +334,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "cnonboard"
+name = "cnportal"
 version = "0.1.0"
 dependencies = [
  "serde",
