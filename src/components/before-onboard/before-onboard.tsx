@@ -1,7 +1,7 @@
 import "./before-onboard.css";
 import { Button, Divider, notification, Table } from "antd";
 import { VendorRadio } from "../vendor-radio/vendor-radio.tsx";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import type { Vendor } from "../../typings/vendor.ts";
 import { StoreContext } from "../../configs/store-context.ts";
 import { Game, MsnGame } from "../../typings/game.ts";
@@ -79,6 +79,32 @@ export const BeforeOnboard = () => {
     setGamesToBeDelete(gamesToBeDelete_);
   }, [vendor]);
 
+  const toBeOnboard = useMemo(() => {
+    return newGames.map(
+      (game, i) =>
+        ({
+          key: game.Name + i,
+          gameName: game.Name,
+          vendor: game.VendorId,
+          playUrl: game.PlayUrl,
+          game,
+        }) as CheckDuplicateTableColumn,
+    );
+  }, [newGames]);
+
+  const toBeDelete = useMemo(() => {
+    return gamesToBeDelete.map(
+      (game, i) =>
+        ({
+          key: game.name + i,
+          gameName: game.name,
+          vendor: game.id.split("_")[0],
+          playUrl: game.playUrl,
+          game: getVendorGameFromMsnGame(game),
+        }) as CheckDuplicateTableColumn,
+    );
+  }, [gamesToBeDelete]);
+
   return (
     <div className="">
       {notifyContextHolder}
@@ -92,44 +118,20 @@ export const BeforeOnboard = () => {
 
       <Divider />
 
-      <h4 className="">要上架的新游戏：</h4>
+      <h4 className="">要上架的新游戏({toBeOnboard.length})：</h4>
       {!newGames.length ? (
         <p className="">无</p>
       ) : (
-        <Table
-          dataSource={newGames.map(
-            (game, i) =>
-              ({
-                key: game.Name + i,
-                gameName: game.Name,
-                vendor: game.VendorId,
-                playUrl: game.PlayUrl,
-                game,
-              }) as CheckDuplicateTableColumn,
-          )}
-          columns={checkDuplicateTableColumns}
-        />
+        <Table dataSource={toBeOnboard} columns={checkDuplicateTableColumns} />
       )}
 
       <Divider />
 
-      <h4 className="">将被删除的游戏：</h4>
+      <h4 className="">将被删除的游戏({toBeDelete.length})：</h4>
       {!gamesToBeDelete.length ? (
         <p className="">无</p>
       ) : (
-        <Table
-          dataSource={gamesToBeDelete.map(
-            (game, i) =>
-              ({
-                key: game.name + i,
-                gameName: game.name,
-                vendor: game.id.split("_")[0],
-                playUrl: game.playUrl,
-                game: getVendorGameFromMsnGame(game),
-              }) as CheckDuplicateTableColumn,
-          )}
-          columns={checkDuplicateTableColumns}
-        />
+        <Table dataSource={toBeDelete} columns={checkDuplicateTableColumns} />
       )}
 
       <Divider />
