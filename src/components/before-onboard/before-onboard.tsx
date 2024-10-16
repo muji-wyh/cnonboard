@@ -8,6 +8,7 @@ import { Game, MsnGame } from "../../typings/game.ts";
 import type { CheckDuplicateTableColumn } from "../../typings/check-duplicate.ts";
 import { checkDuplicateTableColumns } from "../../configs/check-duplicate.tsx";
 import { getVendorGameFromMsnGame } from "../../utils/game.ts";
+import { CopyResult } from "../copy-result/copy-result.tsx";
 
 export const BeforeOnboard = () => {
   const [vendor, setVendor] = useState("");
@@ -121,22 +122,7 @@ export const BeforeOnboard = () => {
       <h4 className="result-item">
         <span className="">要上架的新游戏 ({toBeOnboard.length})</span>
         {!!toBeOnboard.length && (
-          <Button
-            onClick={() => {
-              navigator.clipboard
-                .writeText(
-                  toBeOnboard.map(({ gameName }) => gameName).join(", "),
-                )
-                .then(() => {
-                  console.log("Text copied to clipboard");
-                })
-                .catch((err) => {
-                  console.error("Failed to copy text: ", err);
-                });
-            }}
-          >
-            copy
-          </Button>
+          <CopyResult list={toBeOnboard.map(({ gameName }) => gameName)} />
         )}
       </h4>
       {!newGames.length ? (

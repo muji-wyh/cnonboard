@@ -1,11 +1,12 @@
 import "./total-duplicates.css";
-import { Button, Table } from "antd";
+import { Table } from "antd";
 import type { CheckDuplicateTableColumn } from "../../typings/check-duplicate.ts";
 import { checkDuplicateTableColumns } from "../../configs/check-duplicate.tsx";
 import type { Game } from "../../typings/game.ts";
 import { useContext } from "react";
 import { StoreContext } from "../../configs/store-context.ts";
 import "./total-duplicates.css";
+import { CopyResult } from "../copy-result/copy-result.tsx";
 
 function TotalDuplicate() {
   const storeContext = useContext(StoreContext);
@@ -35,20 +36,7 @@ function TotalDuplicate() {
           {new Set(duplicatedGames.map((d) => d.Name)).size}
         </span>
         {!!duplicatedGames.length && (
-          <Button
-            onClick={() => {
-              navigator.clipboard
-                .writeText(duplicatedGames.map(({ Name }) => Name).join(", "))
-                .then(() => {
-                  console.log("Text copied to clipboard");
-                })
-                .catch((err) => {
-                  console.error("Failed to copy text: ", err);
-                });
-            }}
-          >
-            copy
-          </Button>
+          <CopyResult list={duplicatedGames.map(({ Name }) => Name)} />
         )}
       </p>
 

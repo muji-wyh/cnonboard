@@ -14,6 +14,7 @@ import type { CheckDuplicateTableColumn } from "../../typings/check-duplicate.ts
 import { checkDuplicateTableColumns } from "../../configs/check-duplicate.tsx";
 import { VendorRadio } from "../vendor-radio/vendor-radio.tsx";
 import { StoreContext } from "../../configs/store-context.ts";
+import { CopyResult } from "../copy-result/copy-result.tsx";
 
 const { TextArea } = Input;
 
@@ -131,22 +132,9 @@ function VendorDuplicate() {
                 <div className="">
                   <p className="">
                     查重结果({duplicatedGames.length}){" "}
-                    <Button
-                      onClick={() => {
-                        navigator.clipboard
-                          .writeText(
-                            duplicatedGames.map(({ Name }) => Name).join(", "),
-                          )
-                          .then(() => {
-                            console.log("Text copied to clipboard");
-                          })
-                          .catch((err) => {
-                            console.error("Failed to copy text: ", err);
-                          });
-                      }}
-                    >
-                      copy
-                    </Button>
+                    <CopyResult
+                      list={duplicatedGames.map(({ Name }) => Name)}
+                    />
                   </p>
                   <Table
                     dataSource={duplicatedGames.map(
