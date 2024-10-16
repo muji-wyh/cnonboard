@@ -12,11 +12,6 @@
     display: none;
 }
 
-.game-column {
-    display: flex;
-    gap: 4px;
-}
-
 .game-detail-data {
     width: 600px;
     height: 400px !important;
@@ -33,5 +28,17 @@
     justify-content: flex-end;
 }
 
-@media (prefers-color-scheme: dark) {  }
+.ant-table-tbody {
+    background: linear-gradient(rgb(221, 222, 255) 0%, rgb(238, 238, 255) 70.97%), rgb(255, 255, 255);
+    background-blend-mode: multiply, normal;
+}
 
+.ant-table-cell {
+    background: transparent;
+}
+
+.ant-table-cell-row-hover {
+    background: transparent !important;
+}
+
+@media (prefers-color-scheme: dark) {  }

@@ -1,12 +1,12 @@
 import "./total-duplicates.css";
 import { Table } from "antd";
-import type { CheckDuplicateTableColumn } from "../../typings/check-duplicate.ts";
 import { checkDuplicateTableColumns } from "../../configs/check-duplicate.tsx";
 import type { Game } from "../../typings/game.ts";
 import { useContext } from "react";
 import { StoreContext } from "../../configs/store-context.ts";
 import "./total-duplicates.css";
 import { CopyResult } from "../copy-result/copy-result.tsx";
+import { getTableColumn } from "../../utils/game.ts";
 
 function TotalDuplicate() {
   const storeContext = useContext(StoreContext);
@@ -42,15 +42,8 @@ function TotalDuplicate() {
 
       <Table
         pagination={{ pageSize: 50 }}
-        dataSource={duplicatedGames.map(
-          (game, i) =>
-            ({
-              key: game.Name + i,
-              gameName: game.Name,
-              vendor: game.VendorId,
-              playUrl: game.PlayUrl,
-              game,
-            }) as CheckDuplicateTableColumn,
+        dataSource={duplicatedGames.map((game, i) =>
+          getTableColumn(game, "vendor", i),
         )}
         columns={checkDuplicateTableColumns}
       />

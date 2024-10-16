@@ -18,6 +18,7 @@ export const GameCard = ({ game, type }: Props) => {
         className="img"
       />
       <span className="label">{type}</span>
+      <h2 className="title">{game.Name}</h2>
     </a>
   );
 };

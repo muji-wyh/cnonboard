@@ -10,11 +10,11 @@ import { Divider, Input, notification, Alert, Table } from "antd";
 import "./vendor-duplicates.css";
 import { type Game } from "../../typings/game.ts";
 import { type Vendor } from "../../typings/vendor.ts";
-import type { CheckDuplicateTableColumn } from "../../typings/check-duplicate.ts";
 import { checkDuplicateTableColumns } from "../../configs/check-duplicate.tsx";
 import { VendorRadio } from "../vendor-radio/vendor-radio.tsx";
 import { StoreContext } from "../../configs/store-context.ts";
 import { CopyResult } from "../copy-result/copy-result.tsx";
+import { getTableColumn } from "../../utils/game.ts";
 
 const { TextArea } = Input;
 
@@ -137,15 +137,8 @@ function VendorDuplicate() {
                     />
                   </p>
                   <Table
-                    dataSource={duplicatedGames.map(
-                      (game, i) =>
-                        ({
-                          key: game.Name + i,
-                          gameName: game.Name,
-                          vendor: game.VendorId,
-                          playUrl: game.PlayUrl,
-                          game,
-                        }) as CheckDuplicateTableColumn,
+                    dataSource={duplicatedGames.map((game, i) =>
+                      getTableColumn(game, "vendor", i),
                     )}
                     columns={checkDuplicateTableColumns}
                   />

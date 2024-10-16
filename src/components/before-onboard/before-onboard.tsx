@@ -5,9 +5,8 @@ import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import type { Vendor } from "../../typings/vendor.ts";
 import { StoreContext } from "../../configs/store-context.ts";
 import { Game, MsnGame } from "../../typings/game.ts";
-import type { CheckDuplicateTableColumn } from "../../typings/check-duplicate.ts";
 import { checkDuplicateTableColumns } from "../../configs/check-duplicate.tsx";
-import { getVendorGameFromMsnGame } from "../../utils/game.ts";
+import { getTableColumn } from "../../utils/game.ts";
 import { CopyResult } from "../copy-result/copy-result.tsx";
 
 export const BeforeOnboard = () => {
@@ -81,29 +80,11 @@ export const BeforeOnboard = () => {
   }, [vendor]);
 
   const toBeOnboard = useMemo(() => {
-    return newGames.map(
-      (game, i) =>
-        ({
-          key: game.Name + i,
-          gameName: game.Name,
-          vendor: game.VendorId,
-          playUrl: game.PlayUrl,
-          game,
-        }) as CheckDuplicateTableColumn,
-    );
+    return newGames.map((game, i) => getTableColumn(game, "vendor", i));
   }, [newGames]);
 
   const toBeDelete = useMemo(() => {
-    return gamesToBeDelete.map(
-      (game, i) =>
-        ({
-          key: game.name + i,
-          gameName: game.name,
-          vendor: game.id.split("_")[0],
-          playUrl: game.playUrl,
-          game: getVendorGameFromMsnGame(game),
-        }) as CheckDuplicateTableColumn,
-    );
+    return gamesToBeDelete.map((game, i) => getTableColumn(game, "msn", i));
   }, [gamesToBeDelete]);
 
   return (
@@ -136,22 +117,7 @@ export const BeforeOnboard = () => {
       <h4 className="result-item">
         <span className="">将被删除的游戏 ({toBeDelete.length})</span>
         {!!gamesToBeDelete.length && (
-          <Button
-            onClick={() => {
-              navigator.clipboard
-                .writeText(
-                  toBeDelete.map(({ gameName }) => gameName).join(", "),
-                )
-                .then(() => {
-                  console.log("Text copied to clipboard");
-                })
-                .catch((err) => {
-                  console.error("Failed to copy text: ", err);
-                });
-            }}
-          >
-            copy
-          </Button>
+          <CopyResult list={toBeDelete.map(({ gameName }) => gameName)} />
         )}
       </h4>
       {!gamesToBeDelete.length ? (

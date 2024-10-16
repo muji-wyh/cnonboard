@@ -5,5 +5,8 @@ export type CheckDuplicateTableColumn = {
   key: string;
   vendor: string;
   playUrl: string;
+  heroThumbnails: Game["HeroThumbnail"];
+  genres: Game["Genres"];
+  mobileFriendly: Game["MobileFriendly"];
   game: Game;
 };

@@ -1,4 +1,4 @@
-import { Input, Popover } from "antd";
+import { Input, Popover, Tag } from "antd";
 import { GameCard } from "../components/game-card/game-card.tsx";
 import type { CheckDuplicateTableColumn } from "../typings/check-duplicate.ts";
 
@@ -34,6 +34,30 @@ export const checkDuplicateTableColumns = [
       a.vendor > b.vendor ? -1 : 1,
   },
   {
+    title: "genres",
+    key: "genres",
+    dataIndex: "genres",
+  },
+  {
+    title: "heroThumbnails",
+    key: "heroThumbnails",
+    dataIndex: "heroThumbnails",
+    render(_: string, { game }: CheckDuplicateTableColumn) {
+      return (
+        <img
+          referrerPolicy="no-referrer"
+          src={game.HeroThumbnail}
+          alt={game.Name}
+          className="img"
+          style={{
+            height: "124px",
+            verticalAlign: "top",
+          }}
+        />
+      );
+    },
+  },
+  {
     title: "playUrl",
     key: "playUrl",
     dataIndex: "playUrl",
@@ -42,6 +66,22 @@ export const checkDuplicateTableColumns = [
         <div className="game-column">
           <GameCard game={g.game} type="vendor" />
           <GameCard game={g.game} type="msn" />
+        </div>
+      );
+    },
+  },
+  {
+    title: "mobileFriendly",
+    key: "mobileFriendly",
+    dataIndex: "mobileFriendly",
+    render(_: string, g: CheckDuplicateTableColumn) {
+      return (
+        <div className="game-column">
+          {g.game.MobileFriendly ? (
+            <Tag color="#87d068">Yes</Tag>
+          ) : (
+            <Tag color="#f50">No</Tag>
+          )}
         </div>
       );
     },

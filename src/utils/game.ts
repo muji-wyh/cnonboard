@@ -1,4 +1,5 @@
 import type { Game, MsnGame } from "../typings/game.ts";
+import type { CheckDuplicateTableColumn } from "../typings/check-duplicate.ts";
 
 export const getVendorGameFromMsnGame = (game: MsnGame): Game => {
   return {
@@ -24,4 +25,26 @@ export const getVendorGameFromMsnGame = (game: MsnGame): Game => {
     // added by FE
     VendorId: game.id.split("-")[0],
   } as Game;
+};
+
+export const getTableColumn = (
+  game_: MsnGame | Game,
+  type: "vendor" | "msn",
+  index: number,
+): CheckDuplicateTableColumn => {
+  const game: Game =
+    type === "vendor"
+      ? (game_ as Game)
+      : getVendorGameFromMsnGame(game_ as MsnGame);
+
+  return {
+    key: game.Name + index,
+    gameName: game.Name,
+    vendor: game.VendorId.split("_")[0],
+    playUrl: game.PlayUrl,
+    genres: game.Genres,
+    heroThumbnails: game.HeroThumbnail,
+    mobileFriendly: game.MobileFriendly,
+    game,
+  };
 };
