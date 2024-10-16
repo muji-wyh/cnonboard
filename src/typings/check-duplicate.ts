@@ -8,5 +8,6 @@ export type CheckDuplicateTableColumn = {
   heroThumbnails: Game["HeroThumbnail"];
   genres: Game["Genres"];
   mobileFriendly: Game["MobileFriendly"];
+  fullDescription: Game["FullDescription"];
   game: Game;
 };

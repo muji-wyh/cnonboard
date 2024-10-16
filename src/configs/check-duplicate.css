@@ -1,0 +1,17 @@
+.fullDescription-column {
+  .title {
+    padding: 0;
+    margin: 0;
+  }
+
+  .content {
+    padding: 0;
+    margin: 0;
+  }
+}
+
+.genre-list {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}

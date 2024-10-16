@@ -45,6 +45,7 @@ export const getTableColumn = (
     genres: game.Genres,
     heroThumbnails: game.HeroThumbnail,
     mobileFriendly: game.MobileFriendly,
+    fullDescription: game.FullDescription,
     game,
   };
 };
