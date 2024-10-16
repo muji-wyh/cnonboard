@@ -118,7 +118,27 @@ export const BeforeOnboard = () => {
 
       <Divider />
 
-      <h4 className="">要上架的新游戏({toBeOnboard.length})：</h4>
+      <h4 className="result-item">
+        <span className="">要上架的新游戏 ({toBeOnboard.length})</span>
+        {!!toBeOnboard.length && (
+          <Button
+            onClick={() => {
+              navigator.clipboard
+                .writeText(
+                  toBeOnboard.map(({ gameName }) => gameName).join(", "),
+                )
+                .then(() => {
+                  console.log("Text copied to clipboard");
+                })
+                .catch((err) => {
+                  console.error("Failed to copy text: ", err);
+                });
+            }}
+          >
+            copy
+          </Button>
+        )}
+      </h4>
       {!newGames.length ? (
         <p className="">无</p>
       ) : (
@@ -127,7 +147,27 @@ export const BeforeOnboard = () => {
 
       <Divider />
 
-      <h4 className="">将被删除的游戏({toBeDelete.length})：</h4>
+      <h4 className="result-item">
+        <span className="">将被删除的游戏 ({toBeDelete.length})</span>
+        {!!gamesToBeDelete.length && (
+          <Button
+            onClick={() => {
+              navigator.clipboard
+                .writeText(
+                  toBeDelete.map(({ gameName }) => gameName).join(", "),
+                )
+                .then(() => {
+                  console.log("Text copied to clipboard");
+                })
+                .catch((err) => {
+                  console.error("Failed to copy text: ", err);
+                });
+            }}
+          >
+            copy
+          </Button>
+        )}
+      </h4>
       {!gamesToBeDelete.length ? (
         <p className="">无</p>
       ) : (

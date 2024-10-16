@@ -129,7 +129,25 @@ function VendorDuplicate() {
             <Alert
               message={
                 <div className="">
-                  <p className="">查重结果({duplicatedGames.length}):</p>
+                  <p className="">
+                    查重结果({duplicatedGames.length}){" "}
+                    <Button
+                      onClick={() => {
+                        navigator.clipboard
+                          .writeText(
+                            duplicatedGames.map(({ Name }) => Name).join(", "),
+                          )
+                          .then(() => {
+                            console.log("Text copied to clipboard");
+                          })
+                          .catch((err) => {
+                            console.error("Failed to copy text: ", err);
+                          });
+                      }}
+                    >
+                      copy
+                    </Button>
+                  </p>
                   <Table
                     dataSource={duplicatedGames.map(
                       (game, i) =>
