@@ -15,9 +15,10 @@ export const fetchMsnGames = async ({
     "https://api.msn.com/msn/v0/pages/CasualGames/Landing?apiKey=815OFUpUhXOWSB8eMuBSy9iV8FQfTpD9h9oF9nmBfO&ocid=cg-landing&contentType=landing&ids=&market=zh-cn&user=m-1880ABCDF86F62640DE5BF66F99D630E&lat=39.9078&long=116.3976&activityId=679AA07B-286C-47BD-B8DC-443AC5EDACA3&it=edgeid&fdhead=prg-1sw-cg-cndev&scn=APP_ANON";
   try {
     const data = (
-      (await fetch(isStaging ? api_staging : api_prod, { signal }).then((res) =>
-        res.json(),
-      )) as { value: { data: string }[] }
+      (await fetch(isStaging ? api_staging : api_prod, {
+        signal,
+        cache: "no-store",
+      }).then((res) => res.json())) as { value: { data: string }[] }
     )?.value?.[0].data;
 
     return JSON.parse(data);
@@ -39,7 +40,7 @@ export const fetchVendorGames = async ({ signal }: { signal: AbortSignal }) => {
     vendors.map(
       (vendor: Vendor) =>
         new Promise<Game[]>((resolve, reject) => {
-          fetch(vendor.Api, { signal })
+          fetch(vendor.Api, { signal, cache: "no-store" })
             .then((res) => res.json())
             .then((data) => {
               let result: Game[];
