@@ -1,21 +1,54 @@
 import "./game-table.css";
 import type { CheckDuplicateTableColumn } from "../../typings/check-duplicate.ts";
 import { checkDuplicateTableColumns } from "../../configs/check-duplicate.tsx";
-import { Button, Table } from "antd";
+import { Button, Switch, Table } from "antd";
 import className from "classnames";
+import { useCallback, useContext, useMemo, useState } from "react";
+import { StoreContext } from "../../configs/store-context.ts";
 
 type Props = {
   list: CheckDuplicateTableColumn[];
   withMargin?: boolean;
 };
 
-export const GameTable = ({ list, withMargin }: Props) => {
+export const GameTable = ({ list: list_, withMargin }: Props) => {
+  const { pendingMap } = useContext(StoreContext);
+  const [showPending, setPending] = useState(true);
+
+  const [list, pendingList, notPendingList] = useMemo(() => {
+    const p = [] as CheckDuplicateTableColumn[];
+    const not = [] as CheckDuplicateTableColumn[];
+
+    list_.forEach((d) => {
+      if (pendingMap[d.vendor]?.[d.game.ExternalId]) {
+        p.push(d);
+        return;
+      }
+
+      not.push(d);
+    });
+
+    return [showPending ? p.concat(not) : not, p, not];
+  }, [list_, showPending]);
+
+  // todo-Yoki
+  console.info("pending", pendingMap, list, pendingList, notPendingList);
+
+  const handleChangePending = useCallback((v: boolean) => {
+    setPending(v);
+  }, []);
+
   return (
     <div
       className={className("game-table", {
         "with-margin": withMargin,
       })}
     >
+      <div className="show-pending">
+        <span className="label">展示 pending 的游戏</span>
+        <Switch checked={showPending} onChange={handleChangePending} />
+      </div>
+
       {!list.length ? (
         <p className="">无</p>
       ) : (
@@ -27,6 +60,7 @@ export const GameTable = ({ list, withMargin }: Props) => {
                 {new Set(list.map(({ game }) => game.Name)).size}
               </span>{" "}
             </span>
+
             <Button
               onClick={() => {
                 navigator.clipboard

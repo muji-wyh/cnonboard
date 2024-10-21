@@ -3,7 +3,7 @@ import type { CheckDuplicateTableColumn } from "../typings/check-duplicate.ts";
 
 export const getVendorGameFromMsnGame = (game: MsnGame): Game => {
   return {
-    ExternalId: game.id.split("-")[1],
+    ExternalId: game.id.split("_")[1],
     Name: game.name,
     PlayUrl: game.playUrl,
     Thumbnail: `https://ts4.cn.mm.bing.net/th?id=${game.thumbnailId}&w=124&h=124&qlt=80&c=0&rs=1`,
@@ -23,7 +23,7 @@ export const getVendorGameFromMsnGame = (game: MsnGame): Game => {
     RelatedGameIds: [],
 
     // added by FE
-    VendorId: game.id.split("-")[0],
+    VendorId: game.id.split("_")[0],
   } as Game;
 };
 

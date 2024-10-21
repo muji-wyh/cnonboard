@@ -14,5 +14,13 @@ export type storeContext = {
   allMsnGames: MsnGame[];
   allMsnGamesMap: AllMsnGamesMap;
   allMsnGamesByVendor: AllMsnGamesByVendor;
+  pending: {
+    [vendorId: string]: string[];
+  };
+  pendingMap: {
+    [vendorId: string]: {
+      [gameId: string]: string;
+    };
+  };
   isStaging: boolean;
 };

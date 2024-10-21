@@ -21,4 +21,15 @@
   &.with-margin {
     margin-top: 8px;
   }
+
+  & .show-pending {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    padding: 0 16px;
+
+    & .label {
+      margin-right: 4px;
+    }
+  }
 }
