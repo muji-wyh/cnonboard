@@ -6,16 +6,12 @@ import className from "classnames";
 
 export const OnlineGamesSummary = ({ hide }: { hide?: boolean }) => {
   const storeContext = useContext(StoreContext);
-
   const { allMsnGames, allMsnGamesByVendor } = storeContext;
-
-  // todo-Yoki
-  console.info(">>> allMsnGames", allMsnGames, allMsnGamesByVendor);
 
   const dataSource = useMemo(() => {
     return [
       {
-        title: "total",
+        title: "total(线上)",
         value: !!allMsnGames.length ? (
           <span className="">{allMsnGames.length}</span>
         ) : (

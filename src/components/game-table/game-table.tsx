@@ -15,7 +15,7 @@ export const GameTable = ({ list: list_, withMargin }: Props) => {
   const { pendingMap } = useContext(StoreContext);
   const [showPending, setPending] = useState(true);
 
-  const [list, pendingList, notPendingList] = useMemo(() => {
+  const [list] = useMemo(() => {
     const p = [] as CheckDuplicateTableColumn[];
     const not = [] as CheckDuplicateTableColumn[];
 
@@ -30,9 +30,6 @@ export const GameTable = ({ list: list_, withMargin }: Props) => {
 
     return [showPending ? p.concat(not) : not, p, not];
   }, [list_, showPending]);
-
-  // todo-Yoki
-  console.info("pending", pendingMap, list, pendingList, notPendingList);
 
   const handleChangePending = useCallback((v: boolean) => {
     setPending(v);
@@ -55,10 +52,7 @@ export const GameTable = ({ list: list_, withMargin }: Props) => {
         <>
           <div className="header">
             <span className="total-num">
-              总数:{" "}
-              <span className="num">
-                {new Set(list.map(({ game }) => game.Name)).size}
-              </span>{" "}
+              总数: <span className="num">{list.length}</span>{" "}
             </span>
 
             <Button

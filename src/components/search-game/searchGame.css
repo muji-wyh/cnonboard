@@ -1,0 +1,5 @@
+.search-game-wrap {
+  & .search-wrap {
+    margin-top: 8px;
+  }
+}

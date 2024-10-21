@@ -9,6 +9,7 @@ export const menuKeys = {
   debugInfo: "debugInfo",
   beforeOnboard: "beforeOnboard",
   onlineGameSummary: "onlineGameSummary",
+  searchGame: "searchGame",
 };
 
 export const menuItems: MenuItem[] = [
@@ -27,6 +28,10 @@ export const menuItems: MenuItem[] = [
   {
     key: menuKeys.totalDuplicate,
     label: "total-duplicate",
+  },
+  {
+    key: menuKeys.searchGame,
+    label: "search-game",
   },
   {
     key: menuKeys.debugInfo,

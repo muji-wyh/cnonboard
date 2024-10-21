@@ -19,6 +19,7 @@ import {
 } from "./configs/store-context.ts";
 import TotalDuplicate from "./components/check-duplicate/total-duplicates.tsx";
 import VendorDuplicate from "./components/check-duplicate/vendor-duplicates.tsx";
+import { SearchGame } from "./components/search-game/searchGame.tsx";
 
 function App() {
   const [currentMenuKey, setCurrentMenuKey] = useState(menuKeys.checkDuplicate);
@@ -115,6 +116,7 @@ function App() {
     [menuKeys.onboard]: <OnboardNewGame />,
     [menuKeys.beforeOnboard]: <BeforeOnboard />,
     [menuKeys.onlineGameSummary]: <OnlineGamesSummary />,
+    [menuKeys.searchGame]: <SearchGame />,
     [menuKeys.debugInfo]: <DebugInfo />,
   };
 
