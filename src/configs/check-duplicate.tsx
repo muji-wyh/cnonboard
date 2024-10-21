@@ -28,7 +28,7 @@ export const checkDuplicateTableColumns = [
     },
   },
   {
-    title: "vendor",
+    title: "from",
     key: "vendor",
     dataIndex: "vendor",
     sorter: (a: CheckDuplicateTableColumn, b: CheckDuplicateTableColumn) =>
@@ -83,12 +83,12 @@ export const checkDuplicateTableColumns = [
     },
   },
   {
-    title: "mobileFriendly",
+    title: "MF",
     key: "mobileFriendly",
     dataIndex: "mobileFriendly",
     render(_: string, g: CheckDuplicateTableColumn) {
       return (
-        <div className="game-column">
+        <div className="game-column mobile-friendly">
           {g.game.MobileFriendly ? (
             <Tag color="#87d068">Yes</Tag>
           ) : (

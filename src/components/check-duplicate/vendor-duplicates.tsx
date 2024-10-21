@@ -107,7 +107,9 @@ function VendorDuplicate() {
             <Divider />
 
             <div className="">
-              <p className="">请输入要检查的游戏的名字(每行一个名字)</p>
+              <p className="">
+                请输入要检查的游戏的名字（每行一个名字）（为空时检查所有游戏）
+              </p>
               <p className="">
                 游戏数:{" "}
                 <span className="">
