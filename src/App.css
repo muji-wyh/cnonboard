@@ -42,5 +42,9 @@
   background: transparent !important;
 }
 
+.body-wrap {
+  padding: 0 0 60px;
+}
+
 @media (prefers-color-scheme: dark) {
 }

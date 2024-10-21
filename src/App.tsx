@@ -130,14 +130,16 @@ function App() {
       {notifyContextHolder}
 
       <Spin tip="Loading" size="large" spinning={loading}>
-        <OnlineGamesSummary hide={loading} />
-        <Menu
-          onClick={onClick}
-          selectedKeys={[currentMenuKey]}
-          mode="horizontal"
-          items={menuItems}
-        />
-        {compMap[currentMenuKey]}
+        <div className="body-wrap">
+          <OnlineGamesSummary hide={loading} />
+          <Menu
+            onClick={onClick}
+            selectedKeys={[currentMenuKey]}
+            mode="horizontal"
+            items={menuItems}
+          />
+          {compMap[currentMenuKey]}
+        </div>
       </Spin>
 
       <div className="staging-wrap">

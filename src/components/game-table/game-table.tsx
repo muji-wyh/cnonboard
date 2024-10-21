@@ -2,21 +2,30 @@ import "./game-table.css";
 import type { CheckDuplicateTableColumn } from "../../typings/check-duplicate.ts";
 import { checkDuplicateTableColumns } from "../../configs/check-duplicate.tsx";
 import { Button, Table } from "antd";
+import className from "classnames";
 
 type Props = {
   list: CheckDuplicateTableColumn[];
+  withMargin?: boolean;
 };
 
-export const GameTable = ({ list }: Props) => {
+export const GameTable = ({ list, withMargin }: Props) => {
   return (
-    <div className="game-table">
+    <div
+      className={className("game-table", {
+        "with-margin": withMargin,
+      })}
+    >
       {!list.length ? (
         <p className="">无</p>
       ) : (
         <>
           <div className="header">
             <span className="total-num">
-              总数: <span className="num">{list.length}</span>{" "}
+              总数:{" "}
+              <span className="num">
+                {new Set(list.map(({ game }) => game.Name)).size}
+              </span>{" "}
             </span>
             <Button
               onClick={() => {
@@ -63,7 +72,11 @@ export const GameTable = ({ list }: Props) => {
           </div>
 
           <div className="body">
-            <Table dataSource={list} columns={checkDuplicateTableColumns} />
+            <Table
+              dataSource={list}
+              columns={checkDuplicateTableColumns}
+              pagination={{ pageSize: 50 }}
+            />
           </div>
         </>
       )}
