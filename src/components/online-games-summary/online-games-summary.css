@@ -1,23 +1,31 @@
-ul, li {
+ul,
+li {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-.genre-list {
-  display: flex;
-  flex-flow: column nowrap;
-  gap: 4px;
-}
-
-.genre-item {
-  display: flex;
-  gap: 14px;
-
-  & .label {
-    width: 60px;
-    text-align: end;
+.summary-component {
+  &.hide {
+    visibility: hidden;
   }
 
-  & .content {}
+  & .title {
+  }
+  & .total-num {
+  }
+
+  & .genre-list {
+    display: flex;
+    gap: 4px;
+  }
+
+  & .genre-item {
+  }
+
+  .data-error {
+    color: red;
+    font-weight: bold;
+    cursor: pointer;
+  }
 }

@@ -1,21 +1,25 @@
 .err-msg {
-    & .msg-tip {
-        color: red;
-    }
+  & .msg-tip {
+    color: red;
+  }
 
-    & .msg {
-        color: red;
-    }
+  & .msg {
+    color: red;
+  }
 }
 
 .hidden {
-    display: none;
+  display: none;
 }
 
 .game-detail-data {
-    width: 600px;
-    height: 400px !important;
+  width: 600px;
+  height: 400px !important;
 }
 
-@media (prefers-color-scheme: dark) {  }
+.vendor-dup-container {
+  padding: 8px 0 0;
+}
 
+@media (prefers-color-scheme: dark) {
+}

@@ -1,44 +1,46 @@
 .err-msg {
-    & .msg-tip {
-        color: red;
-    }
+  & .msg-tip {
+    color: red;
+  }
 
-    & .msg {
-        color: red;
-    }
+  & .msg {
+    color: red;
+  }
 }
 
 .hidden {
-    display: none;
+  display: none;
 }
 
 .game-detail-data {
-    width: 600px;
-    height: 400px !important;
+  width: 600px;
+  height: 400px !important;
 }
 
 .staging-wrap {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 1;
-    display: flex;
-    gap: 6px;
-    align-items: center;
-    justify-content: flex-end;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 .ant-table-tbody {
-    background: linear-gradient(rgb(221, 222, 255) 0%, rgb(238, 238, 255) 70.97%), rgb(255, 255, 255);
-    background-blend-mode: multiply, normal;
+  background: linear-gradient(rgb(221, 222, 255) 0%, rgb(238, 238, 255) 70.97%),
+    rgb(255, 255, 255);
+  background-blend-mode: multiply, normal;
 }
 
 .ant-table-cell {
-    background: transparent;
+  background: transparent;
 }
 
 .ant-table-cell-row-hover {
-    background: transparent !important;
+  background: transparent !important;
 }
 
-@media (prefers-color-scheme: dark) {  }
+@media (prefers-color-scheme: dark) {
+}

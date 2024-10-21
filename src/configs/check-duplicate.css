@@ -15,3 +15,8 @@
   align-items: center;
   gap: 4px;
 }
+
+.game-column {
+  display: flex;
+  gap: 4px;
+}

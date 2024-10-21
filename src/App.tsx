@@ -1,12 +1,4 @@
-import {
-  type MenuProps,
-  Menu,
-  Spin,
-  notification,
-  Switch,
-  Divider,
-} from "antd";
-import CheckDuplicate from "./components/check-duplicate/check-duplicate";
+import { type MenuProps, Menu, Spin, notification, Switch } from "antd";
 import { menuItems, menuKeys } from "./configs/menu.tsx";
 import { useState, useEffect, useCallback } from "react";
 import { OnboardNewGame } from "./components/onboard-new-game/onboard-new-game.tsx";
@@ -25,13 +17,15 @@ import {
   storeContextValue as getStoreContextValue,
   StoreContext,
 } from "./configs/store-context.ts";
+import TotalDuplicate from "./components/check-duplicate/total-duplicates.tsx";
+import VendorDuplicate from "./components/check-duplicate/vendor-duplicates.tsx";
 
 function App() {
   const [currentMenuKey, setCurrentMenuKey] = useState(menuKeys.checkDuplicate);
   const [storeContextValue, setStoreContextValue] = useState(
     getStoreContextValue(),
   );
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [notifyApi, notifyContextHolder] = notification.useNotification();
   const showNotify = useCallback((desc: string, msg: string = "错误") => {
     notifyApi.error({
@@ -116,7 +110,8 @@ function App() {
   };
 
   const compMap = {
-    [menuKeys.checkDuplicate]: <CheckDuplicate />,
+    [menuKeys.checkDuplicate]: <VendorDuplicate />,
+    [menuKeys.totalDuplicate]: <TotalDuplicate />,
     [menuKeys.onboard]: <OnboardNewGame />,
     [menuKeys.beforeOnboard]: <BeforeOnboard />,
     [menuKeys.onlineGameSummary]: <OnlineGamesSummary />,
@@ -134,17 +129,8 @@ function App() {
     <StoreContext.Provider value={storeContextValue}>
       {notifyContextHolder}
 
-      <div className="staging-wrap">
-        <span className="">staging:</span>
-        <Switch
-          checked={storeContextValue.isStaging}
-          onChange={handleStagingChange}
-        />
-      </div>
-
-      <Divider />
-
       <Spin tip="Loading" size="large" spinning={loading}>
+        <OnlineGamesSummary hide={loading} />
         <Menu
           onClick={onClick}
           selectedKeys={[currentMenuKey]}
@@ -153,6 +139,14 @@ function App() {
         />
         {compMap[currentMenuKey]}
       </Spin>
+
+      <div className="staging-wrap">
+        <span className="">staging:</span>
+        <Switch
+          checked={storeContextValue.isStaging}
+          onChange={handleStagingChange}
+        />
+      </div>
     </StoreContext.Provider>
   );
 }

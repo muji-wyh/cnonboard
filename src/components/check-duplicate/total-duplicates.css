@@ -1,5 +1,9 @@
 .result {
-    display: flex;
-    gap: 6px;
-    align-items: center;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.total-dup-container {
+  padding: 8px 0 0;
 }

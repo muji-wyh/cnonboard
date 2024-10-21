@@ -2,6 +2,8 @@ import { Button, Divider, Input } from "antd";
 import type { Vendor } from "../../typings/vendor.ts";
 import { useCallback, useState } from "react";
 import { VendorRadio } from "../vendor-radio/vendor-radio.tsx";
+import { Tips } from "../tips/tips.tsx";
+import "./onboard-new-game.css";
 
 const { TextArea } = Input;
 
@@ -15,7 +17,9 @@ export const OnboardNewGame = () => {
   const handleClick = useCallback(() => {}, []);
 
   return (
-    <div className="">
+    <div className="onboard-new-wrap">
+      <Tips content="上线工具 TODO" />
+
       <div className="">
         <p className="">请选择要上架哪家 vendor</p>
 

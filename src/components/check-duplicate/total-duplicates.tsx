@@ -7,6 +7,7 @@ import { StoreContext } from "../../configs/store-context.ts";
 import "./total-duplicates.css";
 import { CopyResult } from "../copy-result/copy-result.tsx";
 import { getTableColumn } from "../../utils/game.ts";
+import { Tips } from "../tips/tips.tsx";
 
 function TotalDuplicate() {
   const storeContext = useContext(StoreContext);
@@ -28,8 +29,8 @@ function TotalDuplicate() {
   }
 
   return (
-    <div className="">
-      <p className="">数据来自: 各个 vendor 提供的接口</p>
+    <div className="total-dup-container">
+      <Tips content="各 vendor 相互查重" />
       <p className="result">
         <span className="">数量</span>
         <span className="">

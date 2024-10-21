@@ -15,6 +15,7 @@ import { VendorRadio } from "../vendor-radio/vendor-radio.tsx";
 import { StoreContext } from "../../configs/store-context.ts";
 import { CopyResult } from "../copy-result/copy-result.tsx";
 import { getTableColumn } from "../../utils/game.ts";
+import { Tips } from "../tips/tips.tsx";
 
 const { TextArea } = Input;
 
@@ -91,10 +92,10 @@ function VendorDuplicate() {
   }, [vendor, inputtedGameNames]);
 
   return (
-    <div className="container">
+    <div className="vendor-dup-container">
       {notifyContextHolder}
 
-      <p className="">数据来自: 各个 vendor 提供的接口</p>
+      <Tips content="各 vendor 间相互查重" />
 
       <div className="check-duplicate">
         <div className="">

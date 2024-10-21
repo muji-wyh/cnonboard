@@ -1,9 +1,10 @@
-import { Divider } from "antd";
+import { Card, List } from "antd";
 import "./online-games-summary.css";
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import { StoreContext } from "../../configs/store-context.ts";
+import className from "classnames";
 
-export const OnlineGamesSummary = () => {
+export const OnlineGamesSummary = ({ hide }: { hide?: boolean }) => {
   const storeContext = useContext(StoreContext);
 
   const { allMsnGames, allMsnGamesByVendor } = storeContext;
@@ -11,26 +12,38 @@ export const OnlineGamesSummary = () => {
   // todo-Yoki
   console.info(">>> allMsnGames", allMsnGames, allMsnGamesByVendor);
 
+  const dataSource = useMemo(() => {
+    return [
+      {
+        title: "total",
+        value: !!allMsnGames.length ? (
+          <span className="">{allMsnGames.length}</span>
+        ) : (
+          <span className="data-error" onClick={() => window.location.reload()}>
+            数据异常,点击刷新
+          </span>
+        ),
+      },
+      ...Object.keys(allMsnGamesByVendor).map((v) => ({
+        title: v,
+        value: allMsnGamesByVendor[v].length,
+      })),
+    ];
+  }, [allMsnGames, allMsnGamesByVendor]);
+
   return (
-    <div className="">
-      <p className="">现有线上游戏的统计</p>
-
-      <h4 className="">总数量: {allMsnGames.length}</h4>
-
-      <Divider />
-
-      <h4 className="">按分类</h4>
-      <ul className="genre-list">
-        {Object.keys(allMsnGamesByVendor).map((vendor) => (
-          <li key={vendor} className="genre-item">
-            <span className="label">{vendor}</span>
-            <span className="content">
-              {allMsnGamesByVendor[vendor].length}
-            </span>
-          </li>
-        ))}
-      </ul>
-      <Divider />
+    <div className={className("summary-component", { hide })}>
+      <List
+        grid={{ gutter: 8, column: 8 }}
+        dataSource={dataSource}
+        renderItem={(item) => (
+          <List.Item>
+            <Card title={item.title} size="small">
+              {item.value}
+            </Card>
+          </List.Item>
+        )}
+      />
     </div>
   );
 };
