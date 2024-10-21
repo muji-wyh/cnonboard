@@ -42,7 +42,9 @@ export const checkDuplicateTableColumns = [
       return (
         <div className="genre-list">
           {game.Genres.map((genre) => (
-            <Tag color="#108ee9">{genre}</Tag>
+            <Tag color="#108ee9" key={genre}>
+              {genre}
+            </Tag>
           ))}
         </div>
       );

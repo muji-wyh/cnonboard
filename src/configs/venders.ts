@@ -1,4 +1,4 @@
-import { Vendor } from "../typings/vendor.ts";
+import { Vendor, VendorIds, VendorMap } from "../typings/vendor.ts";
 import { Game } from "../typings/game.ts";
 
 const v_360 = {
@@ -65,3 +65,8 @@ export const vendors: Vendor[] = [
   ...d,
   games: [] as Game[],
 }));
+
+export const vendorMap = vendors.reduce((acc, cur) => {
+  acc[cur.VendorId as VendorIds] = cur;
+  return acc;
+}, {} as VendorMap);

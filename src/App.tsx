@@ -34,7 +34,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [notifyApi, notifyContextHolder] = notification.useNotification();
   const showNotify = useCallback((desc: string, msg: string = "错误") => {
-    notifyApi.info({
+    notifyApi.error({
       message: msg,
       description: desc,
       placement: "top",
@@ -94,7 +94,7 @@ function App() {
         allMsnGamesByVendor,
       }));
     } catch (e: any) {
-      showNotify(e.message);
+      showNotify(e.message + " | 请刷新重试！");
     }
 
     setLoading(false);
