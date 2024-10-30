@@ -1,5 +1,6 @@
 import "./game-card.css";
 import { type Game } from "../../typings/game.ts";
+import { vendorMap } from "../../configs/venders.ts";
 
 type Props = {
   game: Game;
@@ -10,7 +11,15 @@ export const GameCard = ({ game, type }: Props) => {
   const href = type === "vendor" ? game.PlayUrl : `${game.PlayUrl}`;
 
   return (
-    <a className="card" href={href} target="_blank">
+    <a
+      className="card"
+      href={href}
+      target={
+        game.VendorId === vendorMap["360"].VendorId
+          ? `tab_360_${game.Name}`
+          : "_blank"
+      }
+    >
       <img
         referrerPolicy="no-referrer"
         src={game.Thumbnail}
