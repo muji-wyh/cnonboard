@@ -10,9 +10,28 @@ export const fetchMsnGames = async ({
   isStaging: boolean;
 }) => {
   const api_staging =
-    "https://api.msn.com/msn/v0/pages/CasualGames/Landing?apiKey=815OFUpUhXOWSB8eMuBSy9iV8FQfTpD9h9oF9nmBfO&ocid=cg-landing&contentType=landing&ids=&market=zh-cn&user=m-045423792DE661CA365C36792CD8600B&lat=1.3056&long=103.823&activityId=12E7CC8D-FE25-463C-BD64-BA67C39D0ECB&it=edgeid&fdhead=prg-1sw-cg-cndev,prg-cg-aent-staging&scn=AL_APP_ANON";
+    "https://api.msn.com/msn/v0/pages/CasualGames/Landing?apiKey=815OFUpUhXOWSB8eMuBSy9iV8FQfTpD9h9oF9nmBfO&ocid=cg-landing&contentType=landing&ids=&market=zh-cn&user=m-045423792DE661CA365C36792CD8600B&lat=1.3056&long=103.823&activityId=12E7CC8D-FE25-463C-BD64-BA67C39D0ECB&it=edgeid&fdhead=prg-1sw-cg-cndev,prg-cg-aent-staging,1s-cg-cnnewvd&scn=AL_APP_ANON";
   const api_prod =
-    "https://api.msn.com/msn/v0/pages/CasualGames/Landing?apiKey=815OFUpUhXOWSB8eMuBSy9iV8FQfTpD9h9oF9nmBfO&ocid=cg-landing&contentType=landing&ids=&market=zh-cn&user=m-1880ABCDF86F62640DE5BF66F99D630E&lat=39.9078&long=116.3976&activityId=679AA07B-286C-47BD-B8DC-443AC5EDACA3&it=edgeid&fdhead=prg-1sw-cg-cndev&scn=APP_ANON";
+    "https://api.msn.com/msn/v0/pages/CasualGames/Landing?apiKey=815OFUpUhXOWSB8eMuBSy9iV8FQfTpD9h9oF9nmBfO&ocid=cg-landing&contentType=landing&ids=&market=zh-cn&user=m-1880ABCDF86F62640DE5BF66F99D630E&lat=39.9078&long=116.3976&activityId=679AA07B-286C-47BD-B8DC-443AC5EDACA3&it=edgeid&fdhead=prg-1sw-cg-cndev,1s-cg-cnnewvd&scn=APP_ANON";
+  let retry = 10;
+
+  while (retry-- >= 0) {
+    try {
+      const data = (
+        (await fetch(isStaging ? api_staging : api_prod, {
+          signal,
+          cache: "no-store",
+        }).then((res) => res.json())) as { value: { data: string }[] }
+      )?.value?.[0].data;
+
+      return JSON.parse(data);
+    } catch (e: any) {
+      if (e.name === "AbortError") {
+        return;
+      }
+    }
+  }
+
   try {
     const data = (
       (await fetch(isStaging ? api_staging : api_prod, {
