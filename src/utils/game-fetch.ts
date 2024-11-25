@@ -56,39 +56,41 @@ export const fetchVendorGames = async ({ signal }: { signal: AbortSignal }) => {
   };
 
   const data: Game[][] = await Promise.all(
-    vendors.map(
-      (vendor: Vendor) =>
-        new Promise<Game[]>((resolve, reject) => {
-          fetch(vendor.Api, { signal, cache: "no-store" })
-            .then((res) => res.json())
-            .then((data) => {
-              let result: Game[];
+    vendors
+      .filter(({ Api }) => Api)
+      .map(
+        (vendor: Vendor) =>
+          new Promise<Game[]>((resolve, reject) => {
+            fetch(vendor.Api, { signal, cache: "no-store" })
+              .then((res) => res.json())
+              .then((data) => {
+                let result: Game[];
 
-              if (!Array.isArray(data)) {
-                result = data.data as Game[];
-              } else {
-                result = data as Game[];
-              }
+                if (!Array.isArray(data)) {
+                  result = data.data as Game[];
+                } else {
+                  result = data as Game[];
+                }
 
-              gamesByVendor[vendor.VendorId] = result;
+                gamesByVendor[vendor.VendorId] = result;
 
-              resolve(
-                result.map((d) =>
-                  Object.assign(d, {
-                    VendorId: vendor.VendorId,
-                  }),
-                ),
-              );
-            })
-            .catch((e) => {
-              if (e.name === "AbortError") {
-                return;
-              }
+                resolve(
+                  result.map((d) =>
+                    Object.assign(d, {
+                      VendorId: vendor.VendorId,
+                    }),
+                  ),
+                );
+              })
+              .catch((e) => {
+                if (e.name === "AbortError") {
+                  return;
+                }
 
-              reject(e);
-            });
-        }),
-    ),
+                reject(e);
+              });
+          }),
+      ),
   );
 
   const allVendorGamesMap = data.reduce((acc, cur) => {

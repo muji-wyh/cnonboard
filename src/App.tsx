@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { OnboardNewGame } from "./components/onboard-new-game/onboard-new-game.tsx";
 import { BeforeOnboard } from "./components/before-onboard/before-onboard.tsx";
 import { OnlineGamesSummary } from "./components/online-games-summary/online-games-summary.tsx";
+import { VendorManageSystem } from "./components/vendor-manage-system/vendor-manage-system.tsx";
 import { DebugInfo } from "./components/debug-info/debug-info.tsx";
 import { fetchMsnGames, fetchVendorGames } from "./utils/game-fetch.ts";
 import "./App.css";
@@ -118,6 +119,7 @@ function App() {
     [menuKeys.onlineGameSummary]: <OnlineGamesSummary />,
     [menuKeys.searchGame]: <SearchGame />,
     [menuKeys.debugInfo]: <DebugInfo />,
+    [menuKeys.vendorManageSystem]: <VendorManageSystem />,
   };
 
   const handleStagingChange = useCallback((v: boolean) => {

@@ -7,6 +7,7 @@ export const menuKeys = {
   totalDuplicate: "totalDuplicate",
   onboard: "onboard",
   debugInfo: "debugInfo",
+  vendorManageSystem: "vendorManageSystem",
   beforeOnboard: "beforeOnboard",
   onlineGameSummary: "onlineGameSummary",
   searchGame: "searchGame",
@@ -32,6 +33,10 @@ export const menuItems: MenuItem[] = [
   {
     key: menuKeys.searchGame,
     label: "search-game",
+  },
+  {
+    key: menuKeys.vendorManageSystem,
+    label: "后台管理",
   },
   {
     key: menuKeys.debugInfo,

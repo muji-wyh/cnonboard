@@ -54,6 +54,15 @@ const v_yiqiyoo2 = {
   GameIdPrefix: "yiqiyoo2_",
 };
 
+const v_yiqiyoo3 = {
+  VendorId: "yiqiyoo3",
+  IsVendorDomainRequired: true,
+  VendorDomain: "msn.17yoo.cn",
+  Api: "",
+  Market: "zh-cn",
+  GameIdPrefix: "yiqiyoo3_",
+};
+
 export const vendors: Vendor[] = [
   v_360,
   v_3dm,
@@ -61,6 +70,7 @@ export const vendors: Vendor[] = [
   v_u7u9,
   v_yiqiyoo,
   v_yiqiyoo2,
+  v_yiqiyoo3,
 ].map((d) => ({
   ...d,
   games: [] as Game[],
