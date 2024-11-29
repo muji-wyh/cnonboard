@@ -24,7 +24,7 @@ export const menuItems: MenuItem[] = [
   },
   {
     key: menuKeys.onboard,
-    label: "onboard",
+    label: "onboarded",
   },
   {
     key: menuKeys.totalDuplicate,

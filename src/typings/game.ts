@@ -59,8 +59,16 @@ export type AllVendorGamesMap = {
   [gameName: string]: Game[];
 };
 
+export type AllVendorGamesMapById = {
+  [id: string]: Game;
+};
+
 export type AllMsnGamesMap = {
   [name: string]: MsnGame[];
+};
+
+export type AllMsnGamesMapById = {
+  [id: string]: MsnGame;
 };
 
 // vendor 的 vendor-游戏 map

@@ -1,50 +1,33 @@
 import "./vendor-manage-system.css";
-import { useCallback, useContext, useEffect, useState } from "react";
-import { StoreContext } from "../../configs/store-context.ts";
-import { VendorRadio } from "../vendor-radio/vendor-radio.tsx";
-import type { Vendor } from "../../typings/vendor.ts";
-import { Divider, Input, Space } from "antd";
-
-const { Search } = Input;
-
-const managerSystemConfig = [
-  [
-    "yiqiyoo",
-    {
-      url: "https://ibk.changjingtong.cn/",
-      username: "msnyx",
-      pwd: "msnyx888",
-    },
-  ],
-];
+import { Divider } from "antd";
 
 export const VendorManageSystem = () => {
-  const [vendor, setVendor] = useState("");
-  const storeContext = useContext(StoreContext);
-  const { isStaging } = storeContext;
-
-  useEffect(() => {
-    setVendor("");
-  }, [isStaging]);
-
-  const handleChangeVendor = useCallback((v: Vendor["VendorId"]) => {
-    setVendor(v);
-  }, []);
-
   return (
-    <div className="">
-      <p className="">请选择 vendor</p>
-      <VendorRadio value={vendor} onChange={handleChangeVendor} />
-
-      <Divider />
-
-      <div className="">
-        <Search addonBefore="url" allowClear />
-        <Search addonBefore="username" allowClear />
-        <Search addonBefore="pwd" allowClear />
+    <div className="main">
+      <div className="vendor">
+        <h4 className="head">yiqiyoo3</h4>
+        <div className="body">
+          <p className="item">
+            <span className="label">URL</span>
+            <a
+              href="https://ibk.changjingtong.cn/"
+              target="_blank"
+              className="content"
+            >
+              https://ibk.changjingtong.cn/
+            </a>
+          </p>
+          <p className="item">
+            <span className="label">username</span>
+            <span className="content">msnyx</span>
+          </p>
+          <p className="item">
+            <span className="label">pwd</span>
+            <span className="content">msnyx888</span>
+          </p>
+        </div>
       </div>
-
-      <iframe className="ifm" src="https://ibk.changjingtong.cn/" />
+      <Divider />
     </div>
   );
 };

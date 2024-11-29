@@ -121,4 +121,23 @@ export const checkDuplicateTableColumns = [
       );
     },
   },
+  {
+    title: "diff",
+    key: "diff",
+    dataIndex: "diff",
+    render(_: string, data: CheckDuplicateTableColumn) {
+      return (
+        <div className="diff-column">
+          {!data.diff ? (
+            <Tag color="#f50">No</Tag>
+          ) : (
+            <TextArea
+              className="game-detail-diff"
+              value={JSON.stringify(data.diff, undefined, 4)}
+            />
+          )}
+        </div>
+      );
+    },
+  },
 ];

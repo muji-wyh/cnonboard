@@ -4,6 +4,7 @@ import { pending, pendingMap } from "./pending.ts";
 
 export const storeContextValue = (): GameDataContextType => ({
   allVendorGamesMap: {},
+  allVendorGamesMapById: {},
   gamesByVendor: {},
   msnGames: {
     gamesByGenre: [
@@ -14,6 +15,7 @@ export const storeContextValue = (): GameDataContextType => ({
   },
   allMsnGames: [],
   allMsnGamesMap: {},
+  allMsnGamesMapById: {},
   allMsnGamesByVendor: {},
   isStaging: false,
   pending,

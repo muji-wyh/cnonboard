@@ -1,6 +1,26 @@
-.ifm {
-  width: 100%;
-  height: 100%;
-  min-height: 900px;
-  border: none;
+.main {
+  padding: 20px;
+}
+
+.head {
+  margin: 0;
+  font-size: 22px;
+}
+
+.body {
+  margin-top: 12px;
+
+  & .item {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    height: 32px;
+
+    & .label {
+      flex-basis: 100px;
+    }
+
+    & .content {
+    }
+  }
 }

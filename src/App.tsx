@@ -1,7 +1,7 @@
 import { type MenuProps, Menu, Spin, notification, Switch } from "antd";
 import { menuItems, menuKeys } from "./configs/menu.tsx";
 import { useState, useEffect, useCallback } from "react";
-import { OnboardNewGame } from "./components/onboard-new-game/onboard-new-game.tsx";
+import { OnboardedGames } from "./components/onboarded-game/onboarded-games.tsx";
 import { BeforeOnboard } from "./components/before-onboard/before-onboard.tsx";
 import { OnlineGamesSummary } from "./components/online-games-summary/online-games-summary.tsx";
 import { VendorManageSystem } from "./components/vendor-manage-system/vendor-manage-system.tsx";
@@ -47,20 +47,22 @@ function App() {
         signal,
         isStaging: storeContextValue.isStaging,
       });
+
       let allMsnGames = msnGames.gamesByGenre.reduce(
         (acc, cur) => acc.concat(cur.games),
         [] as MsnGame[],
       );
 
       // deduplicate
-      const allMsnGamesTmpMap = allMsnGames.reduce(
+      const allMsnGamesMapById = allMsnGames.reduce(
         (acc, cur) => {
           acc[cur.id] = cur;
           return acc;
         },
         {} as { [id: MsnGame["id"]]: MsnGame },
       );
-      allMsnGames = Object.values(allMsnGamesTmpMap);
+
+      allMsnGames = Object.values(allMsnGamesMapById);
       const allMsnGamesMap = {} as AllMsnGamesMap;
       const allMsnGamesByVendor = {} as AllMsnGamesByVendor;
 
@@ -83,10 +85,12 @@ function App() {
       setStoreContextValue((prevState) => ({
         ...prevState,
         allVendorGamesMap,
+        allVendorGamesMapById: vendorGames.allVendorGamesMapById,
         gamesByVendor,
         msnGames,
         allMsnGames,
         allMsnGamesMap,
+        allMsnGamesMapById,
         allMsnGamesByVendor,
       }));
     } catch (e: any) {
@@ -114,7 +118,7 @@ function App() {
   const compMap = {
     [menuKeys.checkDuplicate]: <VendorDuplicate />,
     [menuKeys.totalDuplicate]: <TotalDuplicate />,
-    [menuKeys.onboard]: <OnboardNewGame />,
+    [menuKeys.onboard]: <OnboardedGames />,
     [menuKeys.beforeOnboard]: <BeforeOnboard />,
     [menuKeys.onlineGameSummary]: <OnlineGamesSummary />,
     [menuKeys.searchGame]: <SearchGame />,

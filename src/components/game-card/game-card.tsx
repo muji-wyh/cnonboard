@@ -8,7 +8,10 @@ type Props = {
 };
 
 export const GameCard = ({ game, type }: Props) => {
-  const href = type === "vendor" ? game.PlayUrl : `${game.PlayUrl}`;
+  const href =
+    type === "vendor" || game.VendorId === vendorMap["360"].VendorId
+      ? game.PlayUrl
+      : `https://www.msn.com/zh-cn/play/games/testing/cg-test-game?dev-playground=${game.PlayUrl}`;
 
   return (
     <a

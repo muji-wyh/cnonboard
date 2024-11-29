@@ -1,5 +1,7 @@
-import type { Game, MsnGame } from "../typings/game.ts";
+import { Game, MsnGame } from "../typings/game.ts";
 import type { CheckDuplicateTableColumn } from "../typings/check-duplicate.ts";
+import { type DetailedDiff, detailedDiff } from "deep-object-diff";
+import { isEmpty } from "lodash-es";
 
 export const getVendorGameFromMsnGame = (game: MsnGame): Game => {
   return {
@@ -27,10 +29,54 @@ export const getVendorGameFromMsnGame = (game: MsnGame): Game => {
   } as Game;
 };
 
+export const getDiff = (msnGame: MsnGame, vendorGame: Game) => {
+  const x = {
+    Thumbnail16x9: "",
+    Screenshots: "",
+    FullDescription: "",
+    PublishDate: "",
+    Trailers: "",
+    RelatedGameIds: "",
+    DeviceOrientation: "",
+    Thumbnail: "",
+    HeroThumbnail: "",
+    Version: "",
+    DefaultRank: "",
+    PublisherId: "",
+    PublisherName: "",
+    Tags: "",
+  };
+
+  const fromMsn = getVendorGameFromMsnGame(msnGame);
+  const detail = detailedDiff(
+    Object.assign(fromMsn, x),
+    Object.assign(vendorGame, x),
+  ) as unknown as Partial<DetailedDiff>;
+
+  if (isEmpty(detail.added)) {
+    delete detail.added;
+  }
+
+  if (isEmpty(detail.deleted)) {
+    delete detail.deleted;
+  } else {
+    for (const key in detail.deleted as any) {
+      (detail.deleted as any)[key] = (fromMsn as any)[key];
+    }
+  }
+
+  if (isEmpty(detail.updated)) {
+    delete detail.updated;
+  }
+
+  return isEmpty(detail) ? null : detail;
+};
+
 export const getTableColumn = (
   game_: MsnGame | Game,
   type: "vendor" | "msn",
   index: number,
+  diff?: any,
 ): CheckDuplicateTableColumn => {
   const game: Game =
     type === "vendor"
@@ -46,6 +92,7 @@ export const getTableColumn = (
     heroThumbnails: game.HeroThumbnail,
     mobileFriendly: game.MobileFriendly,
     fullDescription: game.FullDescription,
+    diff,
     game,
   };
 };

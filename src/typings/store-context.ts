@@ -5,15 +5,21 @@ import {
   LandingApi,
   MsnGame,
   AllMsnGamesMap,
+  AllVendorGamesMapById,
+  AllMsnGamesMapById,
 } from "./game.ts";
 
 export type storeContext = {
-  allVendorGamesMap: AllVendorGamesMap;
   gamesByVendor: GamesByVendor;
+  allVendorGamesMap: AllVendorGamesMap; // by name
+  allVendorGamesMapById: AllVendorGamesMapById;
+
   msnGames: LandingApi;
   allMsnGames: MsnGame[];
-  allMsnGamesMap: AllMsnGamesMap;
+  allMsnGamesMap: AllMsnGamesMap; // by name
+  allMsnGamesMapById: AllMsnGamesMapById;
   allMsnGamesByVendor: AllMsnGamesByVendor;
+
   pending: {
     [vendorId: string]: string[];
   };

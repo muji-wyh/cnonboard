@@ -5,7 +5,7 @@ import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import type { Vendor } from "../../typings/vendor.ts";
 import { StoreContext } from "../../configs/store-context.ts";
 import { Game, MsnGame } from "../../typings/game.ts";
-import { getTableColumn } from "../../utils/game.ts";
+import { getDiff, getTableColumn } from "../../utils/game.ts";
 import { GameTable } from "../game-table/game-table.tsx";
 import { Tips } from "../tips/tips.tsx";
 
@@ -15,11 +15,15 @@ export const BeforeOnboard = () => {
   const { gamesByVendor, allMsnGamesByVendor, isStaging } = storeContext;
   const [newGames, setNewGames] = useState([] as Game[]);
   const [gamesToBeDelete, setGamesToBeDelete] = useState([] as MsnGame[]);
+  const [gamesToBeUpdate, setGamesToBeUpdate] = useState(
+    [] as unknown as [msnGame: MsnGame, diff: any],
+  );
 
   useEffect(() => {
     setVendor("");
     setNewGames([]);
     setGamesToBeDelete([]);
+    setGamesToBeUpdate([] as unknown as [msnGame: MsnGame, diff: any]);
   }, [isStaging]);
 
   const handleChangeVendor = useCallback((v: Vendor["VendorId"]) => {
@@ -32,10 +36,11 @@ export const BeforeOnboard = () => {
       return;
     }
 
-    const gamesFromVendor = gamesByVendor[v];
+    const gamesFromVendor = gamesByVendor[v] ?? [];
     const gamesFromMsn = allMsnGamesByVendor[v];
     const newGames_ = [] as Game[];
     const gamesToBeDelete_ = [] as MsnGame[];
+    const gamesToBeUpdate_ = [] as unknown as [msnGame: MsnGame, diff: any];
 
     const idMapVendor = gamesFromVendor.reduce(
       (acc, cur) => {
@@ -59,15 +64,26 @@ export const BeforeOnboard = () => {
       }
     }
 
-    // games to be deleted
-    for (const game of gamesFromMsn) {
-      if (!idMapVendor[game.id.split("_")[1]]) {
-        gamesToBeDelete_.push(game);
+    // games to be deleted/update
+    for (const msnGame of gamesFromMsn) {
+      const id = msnGame.id.split("_")[1];
+      const vendorGame = idMapVendor[id];
+
+      if (!vendorGame) {
+        gamesToBeDelete_.push(msnGame);
+        continue;
+      }
+
+      const diff = getDiff(msnGame, vendorGame);
+
+      if (diff) {
+        gamesToBeUpdate_.push([msnGame, diff]);
       }
     }
 
     setNewGames(newGames_);
     setGamesToBeDelete(gamesToBeDelete_);
+    setGamesToBeUpdate(gamesToBeUpdate_);
   }, []);
 
   const toBeOnboard = useMemo(() => {
@@ -76,6 +92,12 @@ export const BeforeOnboard = () => {
 
   const toBeDelete = useMemo(() => {
     return gamesToBeDelete.map((game, i) => getTableColumn(game, "msn", i));
+  }, [gamesToBeDelete]);
+
+  const toBeUpdate = useMemo(() => {
+    return gamesToBeUpdate.map(([game, diff], i) =>
+      getTableColumn(game, "msn", i, diff),
+    );
   }, [gamesToBeDelete]);
 
   return (
@@ -92,13 +114,29 @@ export const BeforeOnboard = () => {
           items={[
             {
               key: "to-be-onboard",
-              label: `要上架的新游戏(${toBeOnboard.length})`,
+              label: `上架(${toBeOnboard.length})`,
               children: <GameTable list={toBeOnboard} />,
             },
             {
               key: "to-be-delete",
-              label: `将被删除的游戏(${toBeDelete.length})`,
+              label: `删除(${toBeDelete.length})`,
               children: <GameTable list={toBeDelete} />,
+            },
+            {
+              key: "to-be-update",
+              label: `更新(${toBeUpdate.length})`,
+              children: <GameTable list={toBeUpdate} />,
+            },
+            {
+              key: "current-online",
+              label: `线上(${allMsnGamesByVendor[vendor].length})`,
+              children: (
+                <GameTable
+                  list={allMsnGamesByVendor[vendor].map((game, i) =>
+                    getTableColumn(game, "msn", i),
+                  )}
+                />
+              ),
             },
           ]}
         />

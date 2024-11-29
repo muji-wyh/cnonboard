@@ -1,6 +1,6 @@
 import "./game-table.css";
 import type { CheckDuplicateTableColumn } from "../../typings/check-duplicate.ts";
-import { checkDuplicateTableColumns } from "../../configs/check-duplicate.tsx";
+import { checkDuplicateTableColumns } from "../../configs/game-table.tsx";
 import { Button, Switch, Table } from "antd";
 import className from "classnames";
 import { useCallback, useContext, useMemo, useState } from "react";

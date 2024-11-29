@@ -10,4 +10,5 @@ export type CheckDuplicateTableColumn = {
   mobileFriendly: Game["MobileFriendly"];
   fullDescription: Game["FullDescription"];
   game: Game;
+  diff?: any;
 };
