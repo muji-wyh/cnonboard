@@ -10,6 +10,7 @@ export const getVendorGameFromMsnGame = (game: MsnGame): Game => {
     PlayUrl: game.playUrl,
     Thumbnail: `https://ts4.cn.mm.bing.net/th?id=${game.thumbnailId}&w=124&h=124&qlt=80&c=0&rs=1`,
     HeroThumbnail: `https://ts4.cn.mm.bing.net/th?id=${game.heroThumbnailId}&w=124&h=124&qlt=80&c=0&rs=1`,
+    Thumbnail16x9: `https://ts4.cn.mm.bing.net/th?id=${game.thumbnail16x9Id}&w=124&h=124&qlt=80&c=0&rs=1`,
     Genres: game.genres,
     Version: "v1",
     FullDescription: game.description,

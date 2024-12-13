@@ -4,6 +4,7 @@ export type Game = {
   Name: string; // "城市极速赛车";
   PlayUrl: string; // "https://www.u7u9.com/flash/playbing/10009249?bing.com";
   Thumbnail: string; // "https://s.u7u9.com/images/b/d/bdc3cd58331de0e919a8fceb1e3b287b.jpg";
+  Thumbnail16x9: string;
   HeroThumbnail: string; // "https://mstatic.u7u9.com/h5game/2/206468/images/intro/game_zu_heng_206468_089738.jpg";
   Genres: string[]; // ["Classics"];
   Version: string; // "1.0.0";
@@ -43,6 +44,7 @@ export type MsnGame = {
   // softLaunched: false;
   tags: string[];
   thumbnailId: string; // "OCGE.3dm_liezhan_v1_main";
+  thumbnail16x9Id: string;
   trailers: any[];
 };
 

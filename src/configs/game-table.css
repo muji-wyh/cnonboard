@@ -21,3 +21,20 @@
   display: flex;
   gap: 4px;
 }
+
+.heroThumbnails-column {
+  display: flex;
+  gap: 10px;
+
+  & .heroThumbnails-item {
+    display: flex;
+    flex-flow: column nowrap;
+
+    & .label {}
+
+    & .img {
+      background: url("/transparent.png");
+      background-size: 12px 12px;
+    }
+  }
+}

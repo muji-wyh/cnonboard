@@ -1,7 +1,7 @@
 import { Input, Popover, Tag } from "antd";
 import { GameCard } from "../components/game-card/game-card.tsx";
 import type { CheckDuplicateTableColumn } from "../typings/check-duplicate.ts";
-import "./check-duplicate.css";
+import "./game-table.css";
 
 const { TextArea } = Input;
 
@@ -56,16 +56,35 @@ export const checkDuplicateTableColumns = [
     dataIndex: "heroThumbnails",
     render(_: string, { game }: CheckDuplicateTableColumn) {
       return (
-        <img
-          referrerPolicy="no-referrer"
-          src={game.HeroThumbnail}
-          alt={game.Name}
-          className="img"
-          style={{
-            height: "124px",
-            verticalAlign: "top",
-          }}
-        />
+        <div className="heroThumbnails-column">
+          <div className="heroThumbnails-item">
+            <img
+              referrerPolicy="no-referrer"
+              src={game.HeroThumbnail}
+              alt={game.Name}
+              className="img"
+              style={{
+                height: "124px",
+                verticalAlign: "top",
+              }}
+            />
+            <span className="label">HeroThumbnail</span>
+          </div>
+
+          <div className="heroThumbnails-item">
+            <img
+              referrerPolicy="no-referrer"
+              src={game.Thumbnail16x9}
+              alt={game.Name}
+              className="img"
+              style={{
+                height: "124px",
+                verticalAlign: "top",
+              }}
+            />
+            <span className="label">Thumbnail16x9</span>
+          </div>
+        </div>
       );
     },
   },
