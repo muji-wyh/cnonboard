@@ -11,7 +11,6 @@ import "./App.css";
 import {
   AllMsnGamesByVendor,
   AllMsnGamesMap,
-  LandingApi,
   MsnGame,
 } from "./typings/game.ts";
 import {
@@ -43,15 +42,10 @@ function App() {
       const vendorGames = await fetchVendorGames({ signal });
       const allVendorGamesMap = vendorGames.allVendorGamesMap;
       const gamesByVendor = vendorGames.gamesByVendor;
-      const msnGames: LandingApi = await fetchMsnGames({
+      const allMsnGames = await fetchMsnGames({
         signal,
         isStaging: storeContextValue.isStaging,
       });
-
-      let allMsnGames = msnGames.gamesByGenre.reduce(
-        (acc, cur) => acc.concat(cur.games),
-        [] as MsnGame[],
-      );
 
       // deduplicate
       const allMsnGamesMapById = allMsnGames.reduce(
@@ -62,12 +56,15 @@ function App() {
         {} as { [id: MsnGame["id"]]: MsnGame },
       );
 
-      allMsnGames = Object.values(allMsnGamesMapById);
       const allMsnGamesMap = {} as AllMsnGamesMap;
       const allMsnGamesByVendor = {} as AllMsnGamesByVendor;
 
       for (const game of allMsnGames) {
-        const [vendorId] = game.id.split("_");
+        const gameNameSplit = game.id.split("_");
+        let vendorId =
+          gameNameSplit.length === 1
+            ? "other" // like "9p0frkbsdvrq"
+            : gameNameSplit[0];
 
         if (!allMsnGamesByVendor[vendorId]) {
           allMsnGamesByVendor[vendorId] = [];
@@ -87,7 +84,6 @@ function App() {
         allVendorGamesMap,
         allVendorGamesMapById: vendorGames.allVendorGamesMapById,
         gamesByVendor,
-        msnGames,
         allMsnGames,
         allMsnGamesMap,
         allMsnGamesMapById,

@@ -105,18 +105,10 @@ export const checkDuplicateTableColumns = [
     render(_: string, g: CheckDuplicateTableColumn) {
       return (
         <div className="fullDescription-column">
-          <div>
-            <h4 className="title">Headline</h4>
-            <p className="content">
-              {g.game.FullDescription?.Headline ?? "未提供"}
-            </p>
-          </div>
-          <div>
-            <h4 className="title">Short</h4>
-            <p className="content">
-              {g.game.FullDescription?.Short ?? "未提供"}
-            </p>
-          </div>
+          <TextArea
+            className="fullDescription-textarea"
+            value={JSON.stringify(g.game.FullDescription, undefined, 4)}
+          />
         </div>
       );
     },

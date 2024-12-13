@@ -2,7 +2,6 @@ import {
   AllVendorGamesMap,
   AllMsnGamesByVendor,
   GamesByVendor,
-  LandingApi,
   MsnGame,
   AllMsnGamesMap,
   AllVendorGamesMapById,
@@ -14,7 +13,6 @@ export type storeContext = {
   allVendorGamesMap: AllVendorGamesMap; // by name
   allVendorGamesMapById: AllVendorGamesMapById;
 
-  msnGames: LandingApi;
   allMsnGames: MsnGame[];
   allMsnGamesMap: AllMsnGamesMap; // by name
   allMsnGamesMapById: AllMsnGamesMapById;

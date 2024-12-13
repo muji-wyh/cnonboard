@@ -26,22 +26,24 @@ export type Game = {
 export type MsnGame = {
   cmsBrandId: string; // "";
   created: string; // "2024-09-30T11:17:25.7874998Z";
-  defaultName: string; // "3dm_liezhan";
+  // defaultName: string; // "3dm_liezhan";
   defaultRank: number; // 21;
+  description: any;
   genres: string[]; // ["Web"];
   heroThumbnailId: string; // "OCGE.3dm_liezhan_v1_hero";
   id: string; // "3dm_liezhan";
-  lastModified: string; // "2024-09-30T11:17:25.7874998Z";
+  // lastModified: string; // "2024-09-30T11:17:25.7874998Z";
   market: string; // "zh-cn";
+  mobileFriendly: boolean;
   name: string; // "烈斩";
   playUrl: string; // "https://yx.shwswl.cn/zt/sqlz/login/";
   publishDate: string; // "2024-09-30T11:17:25.7874998Z";
   publisherId: string; // "game5";
   publisherName: string; // "文枢网络";
-  softLaunched: false;
+  // softLaunched: false;
   tags: string[];
   thumbnailId: string; // "OCGE.3dm_liezhan_v1_main";
-  trailers: string[];
+  trailers: any[];
 };
 
 export type AllMsnGamesByVendor = {
@@ -51,6 +53,10 @@ export type AllMsnGamesByVendor = {
 export type LandingApi = {
   gamesByGenre: {
     games: MsnGame[];
+  }[];
+
+  genres: {
+    genre: string;
   }[];
 };
 

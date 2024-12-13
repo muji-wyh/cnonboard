@@ -1,23 +1,28 @@
 import { vendors } from "../configs/venders.ts";
-import type {
+import {
   AllVendorGamesMap,
   AllVendorGamesMapById,
   Game,
+  LandingApi,
+  MsnGame,
 } from "../typings/game.ts";
 import type { Vendor } from "../typings/vendor.ts";
+import allMsnGames from "../configs/allMsnGames.ts";
 
-export const fetchMsnGames = async ({
+export const fetchMsnGamesByIds = async ({
   signal,
   isStaging,
+  ids = "",
 }: {
   signal: AbortSignal;
   isStaging: boolean;
-}) => {
+  ids?: string;
+}): Promise<LandingApi | undefined> => {
   const base_url =
-    "https://api.msn.com/msn/v0/pages/CasualGames/Landing?apiKey=815OFUpUhXOWSB8eMuBSy9iV8FQfTpD9h9oF9nmBfO&ocid=cg-landing&contentType=landing&ids=&market=zh-cn&user=m-1880ABCDF86F62640DE5BF66F99D630E&lat=39.9078&long=116.3976&activityId=679AA07B-286C-47BD-B8DC-443AC5EDACA3&it=edgeid";
+    "https://api.msn.com/msn/v0/pages/CasualGames/Landing?apiKey=815OFUpUhXOWSB8eMuBSy9iV8FQfTpD9h9oF9nmBfO&ocid=cg-landing&contentType=landing&market=zh-cn&user=m-1880ABCDF86F62640DE5BF66F99D630E&lat=39.9078&long=116.3976&activityId=679AA07B-286C-47BD-B8DC-443AC5EDACA3&it=edgeid";
 
-  const api_prod = `${base_url}&scn=APP_ANON&fdhead=1s-cg-cnnewvd,prg-cg-lstfix-`;
-  const api_staging = `${base_url}&scn=AL_APP_ANON&fdhead=prg-cg-aent-staging,1s-cg-cnnewvd`;
+  const api_prod = `${base_url}&ids=${ids}&scn=APP_ANON&fdhead=1s-cg-cnnewvd,prg-cg-lstfix-`;
+  const api_staging = `${base_url}&ids=${ids}&scn=AL_APP_ANON&fdhead=prg-cg-aent-staging,1s-cg-cnnewvd`;
 
   let retry = 10;
 
@@ -37,23 +42,48 @@ export const fetchMsnGames = async ({
       }
     }
   }
+};
 
-  try {
-    const data = (
-      (await fetch(isStaging ? api_staging : api_prod, {
-        signal,
-        cache: "no-store",
-      }).then((res) => res.json())) as { value: { data: string }[] }
-    )?.value?.[0].data;
+export const fetchMsnGamesByGenres = async ({
+  signal,
+  isStaging,
+}: {
+  signal: AbortSignal;
+  isStaging: boolean;
+}): Promise<LandingApi> => {
+  const landingData = await fetchMsnGamesByIds({ signal, isStaging });
+  const { genres } = landingData!;
+  const resList = await Promise.all(
+    genres.map(({ genre }) =>
+      fetchMsnGamesByIds({ signal, isStaging, ids: genre }),
+    ),
+  );
 
-    return JSON.parse(data);
-  } catch (e: any) {
-    if (e.name === "AbortError") {
-      return;
-    }
+  const gamesByGenre = resList.reduce(
+    (acc, cur) => {
+      return acc.concat(cur!.gamesByGenre);
+    },
+    [] as LandingApi["gamesByGenre"],
+  );
 
-    throw e;
-  }
+  //  let allMsnGames = msnGames.gamesByGenre.reduce(
+  //         (acc, cur) => acc.concat(cur.games),
+  //         [] as MsnGame[],
+  //       );
+
+  return {
+    gamesByGenre,
+    genres,
+  };
+};
+
+export const fetchMsnGames = async (_arg: {
+  signal: AbortSignal;
+  isStaging: boolean;
+}): Promise<MsnGame[]> => {
+  return new Promise((resolve) => {
+    resolve(allMsnGames);
+  });
 };
 
 export const fetchVendorGames = async ({ signal }: { signal: AbortSignal }) => {

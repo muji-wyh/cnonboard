@@ -6,13 +6,6 @@ export const storeContextValue = (): GameDataContextType => ({
   allVendorGamesMap: {},
   allVendorGamesMapById: {},
   gamesByVendor: {},
-  msnGames: {
-    gamesByGenre: [
-      {
-        games: [],
-      },
-    ],
-  },
   allMsnGames: [],
   allMsnGamesMap: {},
   allMsnGamesMapById: {},

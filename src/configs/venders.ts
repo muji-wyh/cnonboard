@@ -63,6 +63,33 @@ const v_yiqiyoo3 = {
   GameIdPrefix: "yiqiyoo3_",
 };
 
+const v_cgg = {
+  VendorId: "cgg",
+  IsVendorDomainRequired: true,
+  VendorDomain: "",
+  Api: "",
+  Market: "zh-cn",
+  GameIdPrefix: "cgg_",
+};
+
+const v_other = {
+  VendorId: "other",
+  IsVendorDomainRequired: true,
+  VendorDomain: "",
+  Api: "",
+  Market: "zh-cn",
+  GameIdPrefix: "other_",
+};
+
+const v_tencent = {
+  VendorId: "tencent",
+  IsVendorDomainRequired: true,
+  VendorDomain: "",
+  Api: "",
+  Market: "zh-cn",
+  GameIdPrefix: "tencent_",
+};
+
 export const vendors: Vendor[] = [
   v_360,
   v_3dm,
@@ -71,6 +98,9 @@ export const vendors: Vendor[] = [
   v_yiqiyoo,
   v_yiqiyoo2,
   v_yiqiyoo3,
+  v_cgg,
+  v_other,
+  v_tencent,
 ].map((d) => ({
   ...d,
   games: [] as Game[],

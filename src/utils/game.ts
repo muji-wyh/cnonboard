@@ -12,11 +12,8 @@ export const getVendorGameFromMsnGame = (game: MsnGame): Game => {
     HeroThumbnail: `https://ts4.cn.mm.bing.net/th?id=${game.heroThumbnailId}&w=124&h=124&qlt=80&c=0&rs=1`,
     Genres: game.genres,
     Version: "v1",
-    FullDescription: {
-      Headline: "",
-      Short: "",
-    },
-    MobileFriendly: false,
+    FullDescription: game.description,
+    MobileFriendly: game.mobileFriendly,
     DeviceOrientation: ["Portrait", "Landscape"],
     DefaultRank: game.defaultRank,
     PublisherId: game.publisherId,
@@ -42,9 +39,9 @@ export const getDiff = (msnGame: MsnGame, vendorGame: Game) => {
     HeroThumbnail: "",
     Version: "",
     DefaultRank: "",
+    DefaultName: "",
     PublisherId: "",
     PublisherName: "",
-    Tags: "",
   };
 
   const fromMsn = getVendorGameFromMsnGame(msnGame);
