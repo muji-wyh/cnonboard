@@ -1,5 +1,5 @@
 import { vendors } from "../configs/venders.ts";
-import {
+import type {
   AllVendorGamesMap,
   AllVendorGamesMapById,
   Game,
@@ -17,7 +17,7 @@ export const fetchMsnGamesByIds = async ({
   signal: AbortSignal;
   isStaging: boolean;
   ids?: string;
-}): Promise<LandingApi | undefined> => {
+}): Promise<MsnGame[]> => {
   const base_url =
     "https://api.msn.com/msn/v0/pages/CasualGames/Landing?apiKey=815OFUpUhXOWSB8eMuBSy9iV8FQfTpD9h9oF9nmBfO&ocid=cg-landing&contentType=landing&market=zh-cn&user=m-1880ABCDF86F62640DE5BF66F99D630E&lat=39.9078&long=116.3976&activityId=679AA07B-286C-47BD-B8DC-443AC5EDACA3&it=edgeid";
 
@@ -35,52 +35,52 @@ export const fetchMsnGamesByIds = async ({
         }).then((res) => res.json())) as { value: { data: string }[] }
       )?.value?.[0].data;
 
-      return JSON.parse(data);
+      const tmpMap = {} as {
+        [k: string]: boolean;
+      };
+
+      const allMsnGames = (JSON.parse(data) as LandingApi).gamesByGenre.reduce(
+        (acc, cur) => {
+          acc.concat(cur.games);
+
+          for (const game of cur.games) {
+            if (tmpMap[game.id]) {
+              continue;
+            }
+
+            tmpMap[game.id] = true;
+            acc.push(game);
+          }
+
+          return acc;
+        },
+        [] as MsnGame[],
+      );
+
+      return allMsnGames;
     } catch (e: any) {
       if (e.name === "AbortError") {
-        return;
+        return [];
       }
     }
   }
+
+  return [];
 };
 
-export const fetchMsnGamesByGenres = async ({
+export const fetchMsnGames = async ({
   signal,
   isStaging,
+  isOnline,
 }: {
   signal: AbortSignal;
   isStaging: boolean;
-}): Promise<LandingApi> => {
-  const landingData = await fetchMsnGamesByIds({ signal, isStaging });
-  const { genres } = landingData!;
-  const resList = await Promise.all(
-    genres.map(({ genre }) =>
-      fetchMsnGamesByIds({ signal, isStaging, ids: genre }),
-    ),
-  );
-
-  const gamesByGenre = resList.reduce(
-    (acc, cur) => {
-      return acc.concat(cur!.gamesByGenre);
-    },
-    [] as LandingApi["gamesByGenre"],
-  );
-
-  //  let allMsnGames = msnGames.gamesByGenre.reduce(
-  //         (acc, cur) => acc.concat(cur.games),
-  //         [] as MsnGame[],
-  //       );
-
-  return {
-    gamesByGenre,
-    genres,
-  };
-};
-
-export const fetchMsnGames = async (_arg: {
-  signal: AbortSignal;
-  isStaging: boolean;
+  isOnline: boolean;
 }): Promise<MsnGame[]> => {
+  if (isOnline) {
+    return await fetchMsnGamesByIds({ signal, isStaging });
+  }
+
   return new Promise((resolve) => {
     resolve(allMsnGames);
   });

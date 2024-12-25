@@ -45,6 +45,7 @@ function App() {
       const allMsnGames = await fetchMsnGames({
         signal,
         isStaging: storeContextValue.isStaging,
+        isOnline: storeContextValue.isOnline,
       });
 
       // deduplicate
@@ -105,7 +106,7 @@ function App() {
       setLoading(false);
       controller.abort();
     };
-  }, [storeContextValue.isStaging]);
+  }, [storeContextValue.isStaging, storeContextValue.isOnline]);
 
   const onClick: MenuProps["onClick"] = (e) => {
     setCurrentMenuKey(e.key);
@@ -126,6 +127,13 @@ function App() {
     setStoreContextValue(() => ({
       ...getStoreContextValue(),
       isStaging: v,
+    }));
+  }, []);
+
+  const handleOnlineChange = useCallback((v: boolean) => {
+    setStoreContextValue(() => ({
+      ...getStoreContextValue(),
+      isOnline: v,
     }));
   }, []);
 
@@ -151,6 +159,12 @@ function App() {
         <Switch
           checked={storeContextValue.isStaging}
           onChange={handleStagingChange}
+        />
+
+        <span className="">online:</span>
+        <Switch
+          checked={storeContextValue.isOnline}
+          onChange={handleOnlineChange}
         />
       </div>
     </StoreContext.Provider>

@@ -11,6 +11,7 @@ export const storeContextValue = (): GameDataContextType => ({
   allMsnGamesMapById: {},
   allMsnGamesByVendor: {},
   isStaging: false,
+  isOnline: false,
   pending,
   pendingMap,
 });

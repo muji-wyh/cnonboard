@@ -12,7 +12,8 @@ import { Tips } from "../tips/tips.tsx";
 export const BeforeOnboard = () => {
   const [vendor, setVendor] = useState("");
   const storeContext = useContext(StoreContext);
-  const { gamesByVendor, allMsnGamesByVendor, isStaging } = storeContext;
+  const { gamesByVendor, allMsnGamesByVendor, isStaging, isOnline } =
+    storeContext;
   const [newGames, setNewGames] = useState([] as Game[]);
   const [gamesToBeDelete, setGamesToBeDelete] = useState([] as MsnGame[]);
   const [gamesToBeUpdate, setGamesToBeUpdate] = useState(
@@ -24,7 +25,7 @@ export const BeforeOnboard = () => {
     setNewGames([]);
     setGamesToBeDelete([]);
     setGamesToBeUpdate([] as unknown as [msnGame: MsnGame, diff: any]);
-  }, [isStaging]);
+  }, [isStaging, isOnline]);
 
   const handleChangeVendor = useCallback((v: Vendor["VendorId"]) => {
     setVendor(v);
@@ -129,10 +130,10 @@ export const BeforeOnboard = () => {
             },
             {
               key: "current-online",
-              label: `线上(${allMsnGamesByVendor[vendor].length})`,
+              label: `线上(${allMsnGamesByVendor[vendor]?.length})`,
               children: (
                 <GameTable
-                  list={allMsnGamesByVendor[vendor].map((game, i) =>
+                  list={(allMsnGamesByVendor[vendor] ?? []).map((game, i) =>
                     getTableColumn(game, "msn", i),
                   )}
                 />

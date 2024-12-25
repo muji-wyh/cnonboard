@@ -24,13 +24,14 @@ function VendorDuplicate() {
   const [duplicatedGames, setDuplicatedGames] = useState([] as Game[]);
   const [notifyApi, notifyContextHolder] = notification.useNotification();
   const storeContext = useContext(StoreContext);
-  const { gamesByVendor, allVendorGamesMap, isStaging } = storeContext;
+  const { gamesByVendor, allVendorGamesMap, isStaging, isOnline } =
+    storeContext;
 
   useEffect(() => {
     setInputtedGameNames([]);
     setVendor("");
     setDuplicatedGames([]);
-  }, [isStaging]);
+  }, [isStaging, isOnline]);
 
   const showNotify = useCallback((desc: string, msg: string = "错误") => {
     notifyApi.info({

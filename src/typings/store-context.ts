@@ -27,4 +27,5 @@ export type storeContext = {
     };
   };
   isStaging: boolean;
+  isOnline: boolean;
 };
