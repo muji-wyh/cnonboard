@@ -6,6 +6,7 @@ import { BeforeOnboard } from "./components/before-onboard/before-onboard.tsx";
 import { OnlineGamesSummary } from "./components/online-games-summary/online-games-summary.tsx";
 import { VendorManageSystem } from "./components/vendor-manage-system/vendor-manage-system.tsx";
 import { DebugInfo } from "./components/debug-info/debug-info.tsx";
+import { SvgTool } from "./components/svg-tool/svg-tool.tsx";
 import { fetchMsnGames, fetchVendorGames } from "./utils/game-fetch.ts";
 import "./App.css";
 import {
@@ -121,6 +122,7 @@ function App() {
     [menuKeys.searchGame]: <SearchGame />,
     [menuKeys.debugInfo]: <DebugInfo />,
     [menuKeys.vendorManageSystem]: <VendorManageSystem />,
+    [menuKeys.svgTool]: <SvgTool />,
   };
 
   const handleStagingChange = useCallback((v: boolean) => {

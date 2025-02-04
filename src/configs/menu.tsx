@@ -8,6 +8,7 @@ export const menuKeys = {
   onboard: "onboard",
   debugInfo: "debugInfo",
   vendorManageSystem: "vendorManageSystem",
+  svgTool: "svgTool",
   beforeOnboard: "beforeOnboard",
   onlineGameSummary: "onlineGameSummary",
   searchGame: "searchGame",
@@ -37,6 +38,10 @@ export const menuItems: MenuItem[] = [
   {
     key: menuKeys.vendorManageSystem,
     label: "后台管理",
+  },
+  {
+    key: menuKeys.svgTool,
+    label: "SVG Tool",
   },
   {
     key: menuKeys.debugInfo,
