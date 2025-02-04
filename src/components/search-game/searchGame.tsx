@@ -7,7 +7,12 @@ import type { Game, MsnGame } from "../../typings/game.ts";
 import { getTableColumn } from "../../utils/game.ts";
 
 export const SearchGame = () => {
-  const { allVendorGamesMap, allMsnGamesMap } = useContext(StoreContext);
+  const {
+    allVendorGamesMap,
+    allMsnGamesMap,
+    allVendorGamesMapById,
+    allMsnGamesMapById,
+  } = useContext(StoreContext);
   const [ipt, setIpt] = useState("");
   const [fromVendor, setFromVendor] = useState([] as Game[]);
   const [fromMsn, setFromMsn] = useState([] as MsnGame[]);
@@ -19,7 +24,7 @@ export const SearchGame = () => {
     [],
   );
 
-  const handleSearch = useCallback(() => {
+  const handleSearchName = useCallback(() => {
     const searchList = Array.from(new Set(ipt.trim().split("\n")));
 
     if (!searchList.length) {
@@ -43,15 +48,40 @@ export const SearchGame = () => {
     setFromMsn(fromMsn_);
   }, [ipt, allVendorGamesMap, allMsnGamesMap]);
 
+  const handleSearchId = useCallback(() => {
+    const searchList = Array.from(new Set(ipt.trim().split("\n")));
+
+    if (!searchList.length) {
+      return;
+    }
+
+    const fromVendor_ = [];
+    const fromMsn_ = [];
+
+    for (const item of searchList) {
+      if (allVendorGamesMapById[item]) {
+        fromVendor_.push(allVendorGamesMapById[item]);
+      }
+
+      if (allMsnGamesMapById[item]) {
+        fromMsn_.push(allMsnGamesMapById[item]);
+      }
+    }
+
+    setFromVendor(fromVendor_);
+    setFromMsn(fromMsn_);
+  }, [ipt, allVendorGamesMapById, allMsnGamesMapById]);
+
   return (
     <div className="search-game-wrap">
       <div className="">
-        <p className="">请输入要检查的游戏的名字（每行一个名字）</p>
+        <p className="">请输入要检查的游戏的名字/ID（每行一个）</p>
         <Input.TextArea rows={10} value={ipt} onChange={handleGameNameInput} />
       </div>
 
       <div className="search-wrap">
-        <Button onClick={handleSearch}>搜索</Button>
+        <Button onClick={handleSearchName}>搜名字</Button>
+        <Button onClick={handleSearchId}>搜 ID</Button>
       </div>
 
       <Tabs
